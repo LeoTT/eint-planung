@@ -18,7 +18,7 @@ erreichen.
 
 ## Logik für Manager
 
-Der Manager wird mit einem AHTN Ansatz verfolgt.  Die Spielfiguren
+Der Manager wird mit einem HTN Ansatz verfolgt.  Die Spielfiguren
 werden nicht sehr autonom sein. Der Grundgedanke ist, dass der
 Manager die Aufgaben verteilt und die Spielfiguren sich mit der
 Umsetzung beschäftigen.  Somit muss in dem HTN nicht mehr jede
@@ -49,15 +49,17 @@ auch berücksichtigen und erfordert mehr Rechenleistung.
 
 ## Welche Algorithmik/Vorgehensweise soll angewendet werden?
 
-Es werden AHTN & minimax angewandt.  Für einen Manager wird AHTN
+Es werden HTN & minimax angewandt.  Für einen Manager wird HTN
 genutzt. Er kontrolliert die Spielfiguren, indem er ihnen Aufgaben
 zuweist.  minimax wird für die einzelnen Spielfiguren genutzt.
 
 ## Welche Literatur/Agenten erscheinen dazu relevant?
-AHTN & minimax sind relevant.
+HTN & minimax sind relevant.
 
 Beide werden jedoch in einem anderen Kontext genutzt:
-- AHTN für grobe Strategien und Navigieren der Einheiten
+
+
+- HTN für grobe Strategien und Navigieren der Einheiten
 - minimax für einzelne Spielfiguren und nur sehr begrenzten Ausschnitt des Spieles
 
 ## Wo sehen Sie die Kernprobleme? Wie wollen Sie z.B. mit Evaluation von Zuständen umgehen? Wie wollen Sie die angehen?
