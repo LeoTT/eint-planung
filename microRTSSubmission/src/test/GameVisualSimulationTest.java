@@ -12,6 +12,7 @@ import ai.mcts.naivemcts.NaiveMCTS;
 import gui.PhysicalGameStatePanel;
 import java.io.OutputStreamWriter;
 import javax.swing.JFrame;
+import micrortssubmission.MicroRTSSubmission;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
@@ -33,7 +34,7 @@ public class GameVisualSimulationTest {
         int PERIOD = 20;
         boolean gameover = false;
         
-        AI ai1 = new WorkerRush(utt, new BFSPathFinding());        
+        AI ai1 = new MicroRTSSubmission(utt);        
         AI ai2 = new RandomBiasedAI();
 
         JFrame w = PhysicalGameStatePanel.newVisualizer(gs,640,640,false,PhysicalGameStatePanel.COLORSCHEME_BLACK);
