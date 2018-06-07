@@ -213,18 +213,18 @@ public class PlayerAction {
      */
     public void fillWithNones(GameState s, int pID, int duration) {
         PhysicalGameState pgs = s.getPhysicalGameState();
-		for (Unit u : pgs.getUnits()) {
-			if (u.getPlayer() == pID) {
-				if (s.unitActions.get(u) == null) {
-					boolean found = false;
-					for (Pair<Unit, UnitAction> pa : actions) {
-						if (pa.m_a == u) {
-							found = true;
-							break;
-						}
-					}
+        for (Unit u : pgs.getUnits()) {
+            if (u.getPlayer() == pID) {
+                if (s.unitActions.get(u) == null) {
+                    boolean found = false;
+                    for (Pair<Unit, UnitAction> pa : actions) {
+                        if (pa.m_a == u) {
+                            found = true;
+                            break;
+                        }
+                    }
                     if (!found) {
-                        actions.add(new Pair<Unit,UnitAction>(u, new UnitAction(UnitAction.TYPE_NONE, duration)));
+                        actions.add(new Pair<Unit, UnitAction>(u, new UnitAction(UnitAction.TYPE_NONE, duration)));
                     }
                 }
             }
