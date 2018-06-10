@@ -1,7 +1,7 @@
 package micrortssubmission;
 
-import playertask.PlayerTask;
 import rts.GameState;
+import playertask.IPlayerTask;
 
 /**
  *
@@ -9,7 +9,7 @@ import rts.GameState;
  */
 public class PlayerTaskEvaluation {
     
-    private int evalGamestate(GameState gs, int unit, PlayerTask task) {
+    private int evalGamestate(GameState gs, int unit, IPlayerTask task) {
         return 1;
     }
     

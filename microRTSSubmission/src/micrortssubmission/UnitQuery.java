@@ -1,32 +1,39 @@
 package micrortssubmission;
 
+import micrortssubmission.enums.TEAM;
+import micrortssubmission.enums.UNIT_TYPE;
+
 /**
  *
  * @author Florian
  */
 public class UnitQuery {
     
-    private int unitId;
-    private int playerId;
+    private UNIT_TYPE unitType;
+    private TEAM playerId;
 
-    public UnitQuery(int unit_id, int player_id) {
-        this.unitId = unit_id;
+    public UnitQuery() {
+        
+    }
+    
+    public UnitQuery(UNIT_TYPE unitType, TEAM player_id) {
+        this.unitType = unitType;
         this.playerId = player_id;
     }
 
-    public int getUnitId() {
-        return unitId;
+    public UNIT_TYPE getUnitType() {
+        return unitType;
     }
 
-    public void setUnitId(int unit_id) {
-        this.unitId = unit_id;
+    public void setUnitType(UNIT_TYPE unit_id) {
+        this.unitType = unit_id;
     }
 
-    public int getPlayerId() {
+    public TEAM getTeam() {
         return playerId;
     }
 
-    public void setPlayerId(int player_id) {
+    public void setTeam(TEAM player_id) {
         this.playerId = player_id;
     }
     

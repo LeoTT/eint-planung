@@ -5,23 +5,23 @@
  */
 package micrortssubmission;
 
+import micrortssubmission.enums.UNIT_TYPE;
 import ai.core.AI;
 import ai.core.AIWithComputationBudget;
 import ai.core.ParameterSpecification;
 import java.util.List;
 import java.util.ArrayList;
+import micrortssubmission.enums.TEAM;
 import rts.GameState;
-import rts.PhysicalGameState;
-import rts.Player;
 import rts.PlayerAction;
-import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
 
 
 public class MicroRTSSubmission extends AIWithComputationBudget {
     UnitTypeTable m_utt = null;
-            
+    Commander commander = new Commander();
+    
     // This is the default constructor that microRTS will call:
     public MicroRTSSubmission(UnitTypeTable utt) {
         super(-1,-1);
@@ -42,9 +42,9 @@ public class MicroRTSSubmission extends AIWithComputationBudget {
     public PlayerAction getAction(int player, GameState gs) {
         PlayerAction pa = new PlayerAction();
         pa.fillWithNones(gs, player, 10);
-        UnitQuery queryObj = new UnitQuery(GameStateAnalyser.BASE_ID, GameStateAnalyser.PLAYER_ID_ME);        
+        UnitQuery queryObj = new UnitQuery(UNIT_TYPE.BASE, TEAM.ME);        
         System.out.println(GameStateAnalyser.getUnits(gs, queryObj));
-        return pa;
+        return this.commander.getAction(gs);
     }    
     
     // This will be called by the microRTS GUI to get the

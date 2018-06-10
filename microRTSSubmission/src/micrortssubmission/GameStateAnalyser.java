@@ -1,5 +1,6 @@
 package micrortssubmission;
 
+import micrortssubmission.enums.UNIT_TYPE;
 import java.util.List;
 import java.util.stream.Collectors;
 import rts.GameState;
@@ -12,17 +13,12 @@ import rts.units.Unit;
  */
 public class GameStateAnalyser {
     
-    static final int RESSOURCE = 0;
-    static final int BASE_ID = 1;
-    static final int PLAYER_ID_ME = 0;
-    static final int PLAYER_ID_ENEMY = 1;
 
-    //
     public static List<Unit> getBases(GameState gs) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
         List<Unit> allUnits = pgs.getUnits();
         return allUnits.stream()
-                .filter(u -> (u.getType().ID == BASE_ID))
+                .filter(u -> (u.getType().ID == UNIT_TYPE.BASE.getUnitId()))
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +35,13 @@ public class GameStateAnalyser {
         List<Unit> allUnits = pgs.getUnits();       
         
         return allUnits.stream()
-                .filter(u -> (u.getPlayer() == query.getPlayerId() && u.getType().ID == query.getUnitId()))
+                .filter(u -> {
+                    boolean hasRightPlayerId = u.getPlayer() == query.getTeam().getPlayerId();
+                    boolean hasRightUnitType = u.getType().ID == query.getUnitType().getUnitId();
+                    
+                    return hasRightPlayerId && hasRightUnitType;
+                })
                 .collect(Collectors.toList());
     }
+
 }

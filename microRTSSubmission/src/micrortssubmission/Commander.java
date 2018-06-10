@@ -3,21 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package playertask;
+package micrortssubmission;
 
+import micrortssubmission.enums.UNIT_TYPE;
 import rts.GameState;
-import rts.units.Unit;
+import rts.PlayerAction;
 
 /**
  *
- * @author Florian
+ * @author leo
  */
-public class CollectPlayerTask implements IPlayerTask{
+public class Commander {
 
-    @Override
-    public float eval(GameState gs, Unit playerUnit) {
-        // fallunterscheidung ob beladen oder nicht, entsprechend distanz zur nächsten base oder nächsten
+    PlayerAction getAction(GameState gs) {
+        PlayerAction pa = new PlayerAction();
+        
+        UnitQuery unitQuery = new UnitQuery(UNIT_TYPE.WORKER, 0);
+        GameStateAnalyser.getUnits(gs, unitQuery);
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }
