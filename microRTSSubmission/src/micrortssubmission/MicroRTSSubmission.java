@@ -5,13 +5,14 @@
  */
 package micrortssubmission;
 
+import util.GameStateAnalyser;
+import util.UnitQuery;
 import micrortssubmission.enums.UNIT_TYPE;
 import ai.core.AI;
 import ai.core.AIWithComputationBudget;
 import ai.core.ParameterSpecification;
 import java.util.List;
 import java.util.ArrayList;
-import micrortssubmission.enums.TEAM;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.units.UnitTypeTable;
@@ -40,11 +41,7 @@ public class MicroRTSSubmission extends AIWithComputationBudget {
     // Called by microRTS at each game cycle.
     // Returns the action the bot wants to execute.
     public PlayerAction getAction(int player, GameState gs) {
-        PlayerAction pa = new PlayerAction();
-        pa.fillWithNones(gs, player, 10);
-        UnitQuery queryObj = new UnitQuery(UNIT_TYPE.BASE, TEAM.ME);        
-        System.out.println(GameStateAnalyser.getUnits(gs, queryObj));
-        return this.commander.getAction(gs);
+        return this.commander.getAction(player,gs);
     }    
     
     // This will be called by the microRTS GUI to get the

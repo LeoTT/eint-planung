@@ -5,9 +5,14 @@
  */
 package micrortssubmission;
 
+import java.awt.Point;
+import util.GameStateAnalyser;
+import util.UnitQuery;
 import micrortssubmission.enums.UNIT_TYPE;
+import playertask.MovePlayerTask;
 import rts.GameState;
 import rts.PlayerAction;
+import rts.units.Unit;
 
 /**
  *
@@ -15,12 +20,11 @@ import rts.PlayerAction;
  */
 public class Commander {
 
-    PlayerAction getAction(GameState gs) {
+    PlayerAction getAction(int player, GameState gs) {
         PlayerAction pa = new PlayerAction();
-        
-        UnitQuery unitQuery = new UnitQuery(UNIT_TYPE.WORKER, 0);
-        GameStateAnalyser.getUnits(gs, unitQuery);
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Unit u = GameStateAnalyser.getUnits(gs, new UnitQuery(UNIT_TYPE.WORKER, player)).get(0);
+        MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(5, 5)), gs, player, 3);
+        pa.addUnitAction(u, minmax.getUnitAction());
+        return pa;
     }
 }

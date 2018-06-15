@@ -23,9 +23,9 @@ public class MovePlayerTask implements IPlayerTask{
 
     @Override
     public float eval(GameState gs, Unit playerUnit) {
-        
-        Point position = new Point(playerUnit.getX(), playerUnit.getY());
-        return (float) target.distance(position);
+        int maxDistance = gs.getPhysicalGameState().getWidth()+gs.getPhysicalGameState().getHeight();
+        int manhattanDistance = Math.abs(playerUnit.getX()-target.x) + Math.abs(playerUnit.getY()-target.y);
+        return Float.MAX_VALUE - (Float.MAX_VALUE/maxDistance)*manhattanDistance;
     }
     
 }
