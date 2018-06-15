@@ -10,7 +10,7 @@ package micrortssubmission.enums;
  * @author leo
  */
 public enum UNIT_TYPE {
-    RESSOURCE(0), BASE(1), WORKER(2), LIGHT(3);
+    RESSOURCE(0), BASE(1), BARRACKS(2), WORKER(3), LIGHT(4), HEAVY(5), RANGED(6);
 
     private int unitId;
 
