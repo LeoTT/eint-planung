@@ -2,8 +2,6 @@ package micrortssubmission;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import micrortssubmission.enums.UNIT_TYPE;
 import playertask.IPlayerTask;
 import rts.GameState;
 import rts.PlayerAction;
@@ -18,7 +16,6 @@ import util.UnitQuery;
  * @author Florian
  */
 public class MiniMax {
-
 
     private long unit;
     private IPlayerTask task;
@@ -40,20 +37,25 @@ public class MiniMax {
 
     public UnitAction getUnitAction() {
         bestAction = null;
-        System.out.println("MiniMax.getUnitAction() = " + bestAction);
+        System.out.println("-------------------------------");
         max(state.clone(), maxDepth);
-        System.out.println("MiniMax.getUnitAction() = " + bestAction);
+        if(bestAction == null) {
+            bestAction = new UnitAction(UnitAction.TYPE_NONE);
+        }
         return bestAction;
     }
 
-    //TODO: execute durch issue+cycle ersetzen, da sonst EInheiten durch Wände laufen können
+    //TODO: execute durch issue+cycle ersetzen, da sonst Einheiten durch Wände laufen können
     private float max(GameState gs, int depth) {
         Unit u = gs.getUnit(unit);
-        if (depth == 0 || u.getHitPoints() <= 0) {
+        if (depth == 0 || u==null||u.getHitPoints() <= 0) {
             return eval(gs);
         }
-        float maxVal = Float.MIN_VALUE;
+        float maxVal = -Float.MAX_VALUE;
         for (UnitAction ua : u.getUnitActions(gs)) {
+            if (depth == maxDepth) { 
+                System.out.println("Current Root Action"+ ua.getActionName() +" / "+ua.getDirection());
+            }
             GameState cloned = gs.clone();
             ua.execute(u, gs);
             float wert = min(cloned, depth - 1);
@@ -61,6 +63,7 @@ public class MiniMax {
                 maxVal = wert;
                 if (depth == maxDepth) {
                     bestAction = ua;
+                    System.out.println("Updated decision to "+bestAction+" with a score of "+maxVal);
                 }
             }
         }
@@ -73,7 +76,8 @@ public class MiniMax {
             return eval(gs);
         }
         float minVal = Float.MAX_VALUE;
-        HashSet<PlayerAction> playerActions = getPossibleActions(GameStateAnalyser.getUnits(gs, new UnitQuery(enemy)), gs);
+        List<Unit> units = GameStateAnalyser.getUnits(gs, new UnitQuery(enemy));
+        HashSet<PlayerAction> playerActions = getPossibleActions(units, gs);
         for (PlayerAction pa : playerActions) {
             GameState cloned = gs.clone();
             try {
@@ -114,13 +118,17 @@ public class MiniMax {
         } else {
             actions.add(new PlayerAction());
         }
-        for (UnitAction ua : u.getUnitActions(gs)) {
-            for (PlayerAction pa : actions) {
-                //Kreuzprodukt bilden
-                PlayerAction pa_new = pa.clone();
-                pa_new.addUnitAction(u, ua);
-                outputSet.add(pa_new);
+        try {
+            for (UnitAction ua : u.getUnitActions(gs)) {
+                for (PlayerAction pa : actions) {
+                    //Kreuzprodukt bilden
+                    PlayerAction pa_new = pa.clone();
+                    pa_new.addUnitAction(u, ua);
+                    outputSet.add(pa_new);
+                }
             }
+        } catch (Exception e) {
+
         }
         return outputSet;
     }
