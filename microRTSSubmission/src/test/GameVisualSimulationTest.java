@@ -30,10 +30,7 @@ public class GameVisualSimulationTest {
     public static void main(String args[]) throws Exception {
         UnitTypeTable utt = new UnitTypeTable();
         PhysicalGameState pgs = PhysicalGameState.load("maps/16x16/basesWorkers16x16.xml", utt);
-        System.setErr(new PrintStream(new OutputStream() {
-            public void write(int b) {
-            }
-        }));
+        System.setErr(new PrintStream(new OutputStream() {public void write(int b) {}})); // Errorlog unterdrücken
 
 //        PhysicalGameState pgs = MapGenerator.basesWorkers8x8Obstacle();
         GameState gs = new GameState(pgs, utt);

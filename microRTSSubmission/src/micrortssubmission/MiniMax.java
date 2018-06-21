@@ -2,12 +2,14 @@ package micrortssubmission;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import playertask.IPlayerTask;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.UnitAction;
 import rts.units.Unit;
 import util.GameStateAnalyser;
+import util.MinMaxTree;
 import util.Pair;
 import util.UnitQuery;
 
@@ -23,6 +25,8 @@ public class MiniMax {
     private int maxDepth;
     private UnitAction bestAction;
 
+    private MinMaxTree tree;
+
     private final int you;
     private final int enemy;
 
@@ -33,13 +37,14 @@ public class MiniMax {
         this.you = player;
         this.maxDepth = maxDepth;
         this.enemy = (you == 1 ? 0 : 1);
+        tree = new MinMaxTree(null, true, maxDepth, maxDepth);
     }
 
     public UnitAction getUnitAction() {
         bestAction = null;
         System.out.println("-------------------------------");
         max(state.clone(), maxDepth);
-        if(bestAction == null) {
+        if (bestAction == null) {
             bestAction = new UnitAction(UnitAction.TYPE_NONE);
         }
         return bestAction;
@@ -48,22 +53,26 @@ public class MiniMax {
     //TODO: execute durch issue+cycle ersetzen, da sonst Einheiten durch Wände laufen können
     private float max(GameState gs, int depth) {
         Unit u = gs.getUnit(unit);
-        if (depth == 0 || u==null||u.getHitPoints() <= 0) {
+        if (depth == 0 || u == null || u.getHitPoints() <= 0) {
             return eval(gs);
         }
         float maxVal = -Float.MAX_VALUE;
         for (UnitAction ua : u.getUnitActions(gs)) {
-            if (depth == maxDepth) { 
-                System.out.println("Current Root Action"+ ua.getActionName() +" / "+ua.getDirection());
+            if (depth == maxDepth) {
+                System.out.println("Current Root Action" + ua.getActionName() + " / " + ua.getDirection());
             }
             GameState cloned = gs.clone();
-            ua.execute(u, gs);
+            ua.execute(cloned.getUnit(u.getID()), cloned);
             float wert = min(cloned, depth - 1);
             if (wert > maxVal) {
                 maxVal = wert;
                 if (depth == maxDepth) {
                     bestAction = ua;
-                    System.out.println("Updated decision to "+bestAction+" with a score of "+maxVal);
+                    System.out.println("\tUpdated decision to " + bestAction + " with a score of " + maxVal);
+                }
+            } else {
+                if (depth == maxDepth) {
+                    System.out.println("Ignored action " + ua + " with a score of " + wert);
                 }
             }
         }
@@ -140,8 +149,52 @@ public class MiniMax {
     private static void executePlayerAction(PlayerAction pa, GameState gs) throws IllegalArgumentException {
         List<Pair<Unit, UnitAction>> actions = pa.getActions();
         for (Pair<Unit, UnitAction> p : actions) {
-            p.m_b.execute(p.m_a, gs);
+            p.m_b.execute(gs.getUnit(p.m_a.getID()), gs);
         }
     }
 
+    private void generateTree(GameState gs, MinMaxTree superTree) {
+        try {
+            if (superTree.getDistanceFromLeaf() != maxDepth) {
+                // Zustandsübergang versuchen
+                executePlayerAction(superTree.getPlayerAction(), gs);
+            }
+            if (superTree.getDistanceFromLeaf() == 0) {
+                // Neuer Zustand ist ein Blatt, Score berechnen
+                superTree.setScore(eval(gs));
+            } else {
+                // MinMax-Logik
+                if (superTree.isMaxNode()) {
+                    Unit u = gs.getUnit(unit);
+                    for (UnitAction ua : u.getUnitActions(gs)) {
+                        GameState cloned = gs.clone();
+                        PlayerAction action = new PlayerAction();
+                        action.addUnitAction(u, ua);
+                        MinMaxTree newTree = new MinMaxTree(action, !superTree.isMaxNode(), superTree.getDistanceFromLeaf() - 1, maxDepth);
+                        superTree.addNode(newTree);
+                        generateTree(cloned, newTree);
+                    }
+                } else {
+                    List<Unit> units = GameStateAnalyser.getUnits(gs, new UnitQuery(enemy));
+                    HashSet<PlayerAction> playerActions = getPossibleActions(units, gs);
+                    for (PlayerAction pa : playerActions) {
+                        GameState cloned = gs.clone();
+                        MinMaxTree newTree = new MinMaxTree(pa, !superTree.isMaxNode(), superTree.getDistanceFromLeaf() - 1, maxDepth);
+                        superTree.addNode(newTree);
+                        generateTree(cloned, newTree);
+                    }
+                }
+            }
+        } catch (IllegalArgumentException ex) {
+            // Ist der Zustandsübergang ungültig muss der Score des Knoten invertiert werden
+            superTree.setScore(superTree.getScore() * -1);
+        }
+    }
+
+    public void generateTree() {
+        generateTree(state.clone(), tree);
+        tree.evaluate();
+        System.out.println("Vorher: "+eval(state));
+        System.out.println(tree);
+    }
 }

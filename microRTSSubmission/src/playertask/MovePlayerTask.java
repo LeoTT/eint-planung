@@ -34,7 +34,7 @@ public class MovePlayerTask implements IPlayerTask {
         }
         int maxDistance = gs.getPhysicalGameState().getWidth() + gs.getPhysicalGameState().getHeight();
         int manhattanDistance = Math.abs(playerUnit.getX() - target.x) + Math.abs(playerUnit.getY() - target.y);
-        return manhattanDistance - maxDistance;
+        return -manhattanDistance - maxDistance;
     }
 
 }

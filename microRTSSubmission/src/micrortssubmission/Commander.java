@@ -24,8 +24,10 @@ public class Commander {
     PlayerAction getAction(int player, GameState gs) {
         PlayerAction pa = new PlayerAction();
         Unit u = GameStateAnalyser.getUnits(gs, new UnitQuery(UNIT_TYPE.WORKER, player)).get(0);
+        
         if (isUnitIdle(u, gs)) {
-            MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(5, 5)), gs, player,3);
+            MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(5, 5)), gs, player, 3);
+            minmax.generateTree();
             pa.addUnitAction(u, minmax.getUnitAction());
         }
         return pa;
