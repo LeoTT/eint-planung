@@ -1,5 +1,7 @@
 package micrortssubmission;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -40,6 +42,10 @@ public class MiniMax {
         tree = new MinMaxTree(null, true, maxDepth, maxDepth);
     }
 
+    /**
+     * Führt die MinMax-Suche nach dem besten nächsten Zug aus.
+     * @return Bester gefundener Zug.
+     */
     public UnitAction getUnitAction() {
         bestAction = null;
         System.out.println("-------------------------------");
@@ -146,6 +152,12 @@ public class MiniMax {
         return task.eval(gs, gs.getUnit(unit));
     }
 
+    /**
+     * Zustandsübergangsfunktion.
+     * @param pa Zustandsübergang.
+     * @param gs Zustand, der verändert wird.
+     * @throws IllegalArgumentException 
+     */
     private static void executePlayerAction(PlayerAction pa, GameState gs) throws IllegalArgumentException {
         List<Pair<Unit, UnitAction>> actions = pa.getActions();
         for (Pair<Unit, UnitAction> p : actions) {
@@ -153,6 +165,11 @@ public class MiniMax {
         }
     }
 
+    /**
+     * Rekursiver Aufbau des Suchbaumes, entsprechend der MiniMax-Suche.
+     * @param gs Kopie des aktuellen Zustands.
+     * @param superTree Übergeordneter Baum. Ist dieser nicht der Wurzelknoten wird zuerst der Zutsandsübergang, der durch den Baum represäntiert wird, ausgeführt.
+     */
     private void generateTree(GameState gs, MinMaxTree superTree) {
         try {
             if (superTree.getDistanceFromLeaf() != maxDepth) {
@@ -191,10 +208,21 @@ public class MiniMax {
         }
     }
 
+    /**
+     * Derzeit Debugmethode. Druckt den Suchbaum nach std::out .
+     * Praktisch genauso teuer wie die eigentliche getUnitAction(), da die gleichen Berechnungen gemacht wurden.
+     */
     public void generateTree() {
+        // Fehlerausgabe deaktivieren
+        PrintStream err = System.err;
+        System.setErr(new PrintStream(new OutputStream() {public void write(int b) {}}));
+        
         generateTree(state.clone(), tree);
         tree.evaluate();
         System.out.println("Vorher: "+eval(state));
         System.out.println(tree);
+        
+        // Fehlerausgabe wiederherstellen
+        System.setErr(err);
     }
 }

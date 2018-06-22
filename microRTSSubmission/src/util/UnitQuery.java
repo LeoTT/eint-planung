@@ -7,19 +7,19 @@ import micrortssubmission.enums.UNIT_TYPE;
  * @author Florian
  */
 public class UnitQuery {
-    
+
     private UNIT_TYPE unitType = null;
     private int playerId = -1;
 
     public UnitQuery() {
-        
+
     }
-    
+
     public UnitQuery(UNIT_TYPE unitType, int player_id) {
         this.unitType = unitType;
         this.playerId = player_id;
     }
-    
+
     public UnitQuery(int player_id) {
         this.playerId = player_id;
     }
@@ -39,6 +39,5 @@ public class UnitQuery {
     public void setTeam(int player_id) {
         this.playerId = player_id;
     }
-    
-    
+
 }

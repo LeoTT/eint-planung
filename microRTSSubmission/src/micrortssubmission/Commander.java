@@ -27,12 +27,18 @@ public class Commander {
         
         if (isUnitIdle(u, gs)) {
             MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(5, 5)), gs, player, 3);
-            minmax.generateTree();
+            //minmax.generateTree(); 
             pa.addUnitAction(u, minmax.getUnitAction());
         }
         return pa;
     }
 
+    /**
+     * Testet, ob eine Einheit in einem Zustand eine Aktion ausführt.
+     * @param u Einheit, die geprüft werden soll.
+     * @param gs Zustand, der geprüft werden soll.
+     * @return <code> true </code>, falls die Einheit nichts tut, <code> false </code> 
+     */
     private static boolean isUnitIdle(Unit u, GameState gs) {
         UnitAction ua = gs.getUnitAction(u);
         return (ua == null || ua.getType() == UnitAction.TYPE_NONE);
