@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.Point;
 import micrortssubmission.enums.UNIT_TYPE;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,9 @@ public class GameStateAnalyser {
         List<Unit> allUnits = pgs.getUnits();
 
         return allUnits.stream()
+                .filter(u -> {
+                    return query.getRange().contains(new Point(u.getX(), u.getY()));
+                })
                 .filter(u -> {
                     boolean hasRightPlayerId = true;
                     if (query.getTeam() != -1) {
