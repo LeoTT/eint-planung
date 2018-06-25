@@ -39,7 +39,7 @@ public class GameVisualSimulationTest {
         boolean gameover = false;
 
         AI ai1 = new MicroRTSSubmission(utt);
-        AI ai2 = new RandomBiasedAI();
+        AI ai2 = new PassiveAI();
 
         JFrame w = PhysicalGameStatePanel.newVisualizer(gs, 640, 640, false, PhysicalGameStatePanel.COLORSCHEME_BLACK);
 //        JFrame w = PhysicalGameStatePanel.newVisualizer(gs,640,640,false,PhysicalGameStatePanel.COLORSCHEME_WHITE);

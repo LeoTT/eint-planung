@@ -28,6 +28,8 @@ public class MiniMax {
     private UnitAction bestAction;
 
     private MinMaxTree tree;
+    //Wenn die Einheit "stirbt", möchten wir uns den letzten Zustand merken, wo er noch am leben war.
+    private Unit unitLastAlive;
 
     private final int you;
     private final int enemy;
@@ -65,7 +67,7 @@ public class MiniMax {
         float maxVal = -Float.MAX_VALUE;
         for (UnitAction ua : u.getUnitActions(gs)) {
             if (depth == maxDepth) {
-                System.out.println("Current Root Action" + ua.getActionName() + " / " + ua.getDirection());
+                System.out.println("Considering action: " + ua.getActionName() + " / " + ua.getDirection());
             }
             GameState cloned = gs.clone();
             ua.execute(cloned.getUnit(u.getID()), cloned);
@@ -158,10 +160,15 @@ public class MiniMax {
      * @param gs Zustand, der verändert wird.
      * @throws IllegalArgumentException 
      */
-    private static void executePlayerAction(PlayerAction pa, GameState gs) throws IllegalArgumentException {
+    private  void executePlayerAction(PlayerAction pa, GameState gs) throws IllegalArgumentException {
+
         List<Pair<Unit, UnitAction>> actions = pa.getActions();
         for (Pair<Unit, UnitAction> p : actions) {
+            if (gs.getUnit(unit) != null) {
+                 unitLastAlive = gs.getUnit(unit);
+            }
             p.m_b.execute(gs.getUnit(p.m_a.getID()), gs);
+
         }
     }
 
