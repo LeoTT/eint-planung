@@ -65,7 +65,8 @@ public class MiniMax {
             return eval(gs);
         }
         float maxVal = -Float.MAX_VALUE;
-        for (UnitAction ua : u.getUnitActions(gs)) {
+        
+        for (UnitAction ua : GameStateAnalyser.filterActions(u.getUnitActions(gs), task)) {
             if (depth == maxDepth) {
                 System.out.println("Considering action: " + ua.getActionName() + " / " + ua.getDirection());
             }

@@ -10,6 +10,7 @@ import util.GameStateAnalyser;
 import util.UnitQuery;
 import micrortssubmission.enums.UNIT_TYPE;
 import playertask.AttackPlayerTask;
+import playertask.BuildPlayerTask;
 import playertask.MovePlayerTask;
 import rts.GameState;
 import rts.PlayerAction;
@@ -31,8 +32,10 @@ public class Commander {
             Unit enemyBase = GameStateAnalyser.getUnits(gs, new UnitQuery(UNIT_TYPE.BASE, enemy)).get(0);
             Unit enemyWorker = GameStateAnalyser.getUnits(gs, new UnitQuery(UNIT_TYPE.WORKER, enemy)).get(0);
             Point enemyBasePosition = new Point(enemyBase.getX(), enemyBase.getY() - 3);
-            MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(enemyWorker.getX(), enemyWorker.getY())), gs, player, 2);      
-            //MiniMax minmax = new MiniMax(u, new AttackPlayerTask(enemyWorker), gs, player, 2);            
+            //MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(enemyWorker.getX(), enemyWorker.getY())), gs, player, 2);    
+            MiniMax minmax = new MiniMax(u, new MovePlayerTask(new Point(5,5)), gs, player, 2);
+            //MiniMax minmax = new MiniMax(u, new AttackPlayerTask(enemyBase), gs, player, 2);
+            //MiniMax minmax = new MiniMax(u, new BuildPlayerTask(UNIT_TYPE.BASE, new Point(5,5)), gs, player, 2);
             //minmax.generateTree(); 
             pa.addUnitAction(u, minmax.getUnitAction());
         }

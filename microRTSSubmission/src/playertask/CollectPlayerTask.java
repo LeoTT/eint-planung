@@ -5,7 +5,10 @@
  */
 package playertask;
 
+import java.util.HashSet;
+import java.util.Set;
 import rts.GameState;
+import rts.UnitAction;
 import rts.units.Unit;
 
 /**
@@ -18,6 +21,17 @@ public class CollectPlayerTask implements IPlayerTask {
     // Wenn keiner ne Idee hat müssen wir wohl das Interface umschreiben, dass es eine StatefulUnit kriegt, die Ihre Kopie eines Task updated.
     
     public CollectPlayerTask() {
+    }
+    
+    @Override
+    public Set<Integer> getPermittedActionIDs() {
+        HashSet set = new HashSet();
+        set.add(UnitAction.TYPE_MOVE);
+        set.add(UnitAction.TYPE_NONE);
+        set.add(UnitAction.TYPE_ATTACK_LOCATION);
+        set.add(UnitAction.TYPE_HARVEST);
+        set.add(UnitAction.TYPE_RETURN);
+        return set;
     }
 
     @Override
