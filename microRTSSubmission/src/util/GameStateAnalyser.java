@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import micrortssubmission.enums.UNIT_TYPE;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import playertask.IPlayerTask;
@@ -59,7 +60,27 @@ public class GameStateAnalyser {
                 })
                 .collect(Collectors.toList());
     }
+    
+    public static Unit getClosestUnit(GameState gs, UnitQuery query, Point p) {
+        List<Unit> units = getUnits(gs,query);
+        Optional<Unit> unit = units.stream().min((t, t1) -> {
+            return getDistance(p, getPoint(t)) - getDistance(p, getPoint(t1));
+        });
+        if(unit.isPresent()) {
+            return unit.get();
+        } else {
+            return null;
+        }
+    }
+    
+    public static Point getPoint(Unit u) {
+        return new Point(u.getX(), u.getY());
+    }
 
+    public static int getDistance(Point p1, Point p2) {
+        return (int) (Math.abs(p1.getX()-p2.getX())+Math.abs(p1.getY()-p2.getY()));
+    }
+    
     public static int getDistance(GameState gs, long unit1Id, long unit2Id) {
         Unit u1 = gs.getUnit(unit1Id);
         Unit u2 = gs.getUnit(unit2Id);

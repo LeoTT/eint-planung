@@ -67,9 +67,6 @@ public class MiniMax {
         float maxVal = -Float.MAX_VALUE;
         
         for (UnitAction ua : GameStateAnalyser.filterActions(u.getUnitActions(gs), task)) {
-            if (depth == maxDepth) {
-                System.out.println("Considering action: " + ua.getActionName() + " / " + ua.getDirection());
-            }
             GameState cloned = gs.clone();
             ua.execute(cloned.getUnit(u.getID()), cloned);
             float wert = min(cloned, depth - 1);
@@ -77,7 +74,7 @@ public class MiniMax {
                 maxVal = wert;
                 if (depth == maxDepth) {
                     bestAction = ua;
-                    System.out.println("\tUpdated decision to " + bestAction + " with a score of " + maxVal);
+                    System.out.println("Updated decision to " + bestAction + " with a score of " + maxVal);
                 }
             } else {
                 if (depth == maxDepth) {
