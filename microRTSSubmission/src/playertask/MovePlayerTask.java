@@ -13,7 +13,7 @@ import rts.units.Unit;
  *
  * @author Florian
  */
-public class MovePlayerTask implements IPlayerTask {
+public class MovePlayerTask extends AbstractPlayerTask {
 
     private Point target;
     private MOOD mood;
@@ -52,10 +52,10 @@ public class MovePlayerTask implements IPlayerTask {
         if (playerUnit == null) {            
             return -10000000;
         }
-        int maxDistance = gs.getPhysicalGameState().getWidth() + gs.getPhysicalGameState().getHeight();
-        int manhattanDistance = Math.abs(playerUnit.getX() - target.x) + Math.abs(playerUnit.getY() - target.y);
+        int worst = gs.getPhysicalGameState().getWidth() + gs.getPhysicalGameState().getHeight();
+        int actual = Math.abs(playerUnit.getX() - target.x) + Math.abs(playerUnit.getY() - target.y);
         //return -manhattanDistance - maxDistance;
-        return -manhattanDistance;
+        return normalize(0,worst,actual);
     }
 
 }

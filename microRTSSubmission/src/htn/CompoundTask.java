@@ -5,8 +5,11 @@
  */
 package htn;
 
+import htn.tasks.PrimitiveTask;
+import htn.tasks.Task;
 import java.util.LinkedList;
 import java.util.List;
+import util.ExtendedGameState;
 
 /**
  *
@@ -26,11 +29,11 @@ public class CompoundTask extends Task{
     }
     
     @Override
-    public List<PrimitiveTask> resolve(Object o) {
+    public List<PrimitiveTask> resolve(ExtendedGameState o) {
         for(Method m : availableMethods) {
             try {
-                List<PrimitiveTask> l = m.resolveTasks(o);
-                return l;                
+                List<PrimitiveTask> ll = m.resolveTasks(o);
+                return ll;                
             } catch(UnresolvableException ex) {                
             }
         }

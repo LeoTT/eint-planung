@@ -1,5 +1,7 @@
 package htn.condition;
 
+import util.ExtendedGameState;
+
 /**
  * Klasse zum testen der HTN-Funktionalität.
  * Ermöglicht das an und abschalten einzelne Methoden abzuschalten. Sollte im Normalbetrieb nicht benutzt werden.
@@ -17,7 +19,7 @@ public class DebugCondition extends Condition {
     
     @Override
     @Deprecated
-    public boolean conditionFulfilled(Object o) {
+    public boolean conditionFulfilled(ExtendedGameState o) {
         /* o wird nicht verwendet */
         return state;
     }

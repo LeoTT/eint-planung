@@ -8,17 +8,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import playertask.IPlayerTask;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.UnitAction;
 import rts.units.Unit;
+import playertask.AbstractPlayerTask;
 
 /**
  *
  * @author Florian
  */
-public class GameStateAnalyser {
+public abstract class GameStateAnalyser {
+    
+    public static int PLAYER;
+    public static int ENEMY;
 
     public static List<Unit> getBases(GameState gs) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
@@ -87,7 +90,7 @@ public class GameStateAnalyser {
         return Math.abs(u1.getX() + u2.getX()) + Math.abs(u1.getY() + u2.getY());
     }
 
-    public static List<UnitAction> filterActions(List<UnitAction> actions, IPlayerTask task) {
+    public static List<UnitAction> filterActions(List<UnitAction> actions, AbstractPlayerTask task) {
         Set<Integer> allowed = task.getPermittedActionIDs();
         LinkedList<UnitAction> returnList = new LinkedList<>(actions.stream()
                 .filter(

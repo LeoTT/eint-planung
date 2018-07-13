@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import playertask.IPlayerTask;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.UnitAction;
@@ -14,6 +13,7 @@ import util.GameStateAnalyser;
 import util.MinMaxTree;
 import util.Pair;
 import util.UnitQuery;
+import playertask.AbstractPlayerTask;
 
 /**
  *
@@ -22,7 +22,7 @@ import util.UnitQuery;
 public class MiniMax {
 
     private long unit;
-    private IPlayerTask task;
+    private AbstractPlayerTask task;
     private GameState state;
     private int maxDepth;
     private UnitAction bestAction;
@@ -34,7 +34,7 @@ public class MiniMax {
     private final int you;
     private final int enemy;
 
-    public MiniMax(Unit unit, IPlayerTask task, GameState state, int player, int maxDepth) {
+    public MiniMax(Unit unit, AbstractPlayerTask task, GameState state, int player, int maxDepth) {
         this.unit = unit.getID();
         this.task = task;
         this.state = state;

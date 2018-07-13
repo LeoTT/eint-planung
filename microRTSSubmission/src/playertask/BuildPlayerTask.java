@@ -20,7 +20,7 @@ import util.UnitQuery;
  *
  * @author Florian
  */
-public class BuildPlayerTask implements IPlayerTask{
+public class BuildPlayerTask extends AbstractPlayerTask{
 
     private Point targetPosition;
     private UNIT_TYPE buildingType;

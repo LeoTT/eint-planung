@@ -5,15 +5,18 @@
  */
 package htn;
 
+import htn.tasks.PrimitiveTask;
+import htn.tasks.Task;
 import htn.condition.Condition;
 import java.util.LinkedList;
 import java.util.List;
+import util.ExtendedGameState;
 
 /**
  *
  * @author marcel
  */
-class Method {
+public class Method {
 
     Condition condition;
     List<Task> taskList;
@@ -23,7 +26,7 @@ class Method {
         this.taskList = taskList;
     }
 
-    public List<PrimitiveTask> resolveTasks(Object o) throws UnresolvableException {
+    public List<PrimitiveTask> resolveTasks(ExtendedGameState o) throws UnresolvableException {
         if (!condition.conditionFulfilled(o)) {
             // Methode ist nicht anwendbar
             throw new UnresolvableException();

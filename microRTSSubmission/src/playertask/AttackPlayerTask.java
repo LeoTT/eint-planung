@@ -16,8 +16,10 @@ import rts.units.Unit;
  *
  * @author Florian
  */
-public class AttackPlayerTask implements IPlayerTask {
+public class AttackPlayerTask extends AbstractPlayerTask {
 
+    //TODO: Funktioniert mies für RANGED, sollte man fixen, wenn man Zeit hat
+    
     private Unit enemyUnit;
     //TODO: Stellschrauben in MOOD packen
     // Stellschrauben für Verhalten
