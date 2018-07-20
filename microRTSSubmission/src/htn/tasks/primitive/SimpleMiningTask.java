@@ -29,21 +29,32 @@ public class SimpleMiningTask extends PrimitiveTask {
         reserved = new HashSet<>();
     }
 
+    /**
+     * Reserviert alle freien Einheiten, die Ernten können.
+     * @param egs ExtendedGameState, aud dem reserviert wird.
+     * @return Einelementige Liste mit diesem Task als Element.
+     */
     @Override
-    public List<PrimitiveTask> resolve(ExtendedGameState o) {
-        Set<Long> playersWithTask = o.getUnreservedPlayersWithTask(null);
-        GameState gs = o.getGameState();
+    public List<PrimitiveTask> resolve(ExtendedGameState egs) {
+        Set<Long> playersWithTask = egs.getUnreservedPlayersWithTask(null);
+        GameState gs = egs.getGameState();
         List<Unit> units = GameStateAnalyser.getUnits(gs, new UnitQuery(UNIT_TYPE.WORKER, GameStateAnalyser.PLAYER));
         for (Unit u : units) {
             if (playersWithTask.contains(u.getID())) {
-                if(o.reserveUnit(u.getID())) {
+                if(egs.reserveUnit(u.getID())) {
                     reserved.add(u.getID());
                 }
             }
         }
-        return super.resolve(o); //To change body of generated methods, choose Tools | Templates.
+        // Element zur Liste hinzufügen.
+        return super.resolve(egs);
     }
 
+    /**
+     * Fügt für alle reservierten Einheiten einen Ernte-Task in den ExtendedGameState hinzu.
+     * Der Commander wird diesen anschließend zur Suche benutzen.
+     * @param egs der zu manipuliere ExtendedGameState.
+     */
     @Override
     public void execute(ExtendedGameState egs) {
         GameState gs = egs.getGameState();

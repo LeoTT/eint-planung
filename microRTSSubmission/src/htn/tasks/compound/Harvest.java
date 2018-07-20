@@ -9,7 +9,6 @@ import htn.CompoundTask;
 import htn.Method;
 import htn.tasks.PrimitiveTask;
 import htn.condition.Condition;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -27,9 +26,14 @@ import util.UnitQuery;
 public class Harvest extends CompoundTask{    
     
     public Harvest() {
+        //Stützt sich auf die Standardauflöselogik. Man muss nur die Methodenliste übergeben.
         super(getMethods());
     }
     
+    /**
+     * Erzeugt die Methoden, die dieser CompoundTask hat.
+     * @return Methoden vom Harvest CompoundTask
+     */
     private static LinkedList<Method> getMethods() {
         LinkedList<Method> methods = new LinkedList<>();
         Condition c = new Condition() {
