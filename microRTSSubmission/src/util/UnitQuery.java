@@ -25,6 +25,12 @@ public class UnitQuery {
         this.playerId = player_id;
     }
 
+    public UnitQuery(UNIT_TYPE unitType) {
+        this();
+        this.unitType = unitType;
+        this.playerId = -1;
+    }
+        
     public UnitQuery(int player_id) {
         this();
         this.playerId = player_id;
