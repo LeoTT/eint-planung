@@ -5,10 +5,13 @@
  */
 package htn.tasks.compound;
 
-import htn.CompoundTask;
+import htn.tasks.CompoundTask;
 import htn.Method;
 import htn.tasks.PrimitiveTask;
 import htn.condition.Condition;
+import htn.tasks.Task;
+import htn.tasks.primitive.SimpleMiningTask;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +26,7 @@ import util.UnitQuery;
  *
  * @author marcel
  */
-public class Harvest extends CompoundTask{    
+public class Harvest extends CompoundTask {    
     
     public Harvest() {
         //Stützt sich auf die Standardauflöselogik. Man muss nur die Methodenliste übergeben.
@@ -34,23 +37,34 @@ public class Harvest extends CompoundTask{
      * Erzeugt die Methoden, die dieser CompoundTask hat.
      * @return Methoden vom Harvest CompoundTask
      */
-    private static LinkedList<Method> getMethods() {
-        LinkedList<Method> methods = new LinkedList<>();
-        Condition c = new Condition() {
-            // Anonyme Condition, um zu prüfen, ob man seinen Anteil an Minen mit Workern belegen kann
-            @Override
-            public boolean conditionFulfilled(ExtendedGameState o) {
-                Set<Long> set = o.getPlayersWithTask(null);
-                set.addAll(o.getPlayersWithTask(CollectPlayerTask.class));
-                List<Unit> units = GameStateAnalyser.getUnits(o.getGameState(), new UnitQuery(UNIT_TYPE.RESSOURCE, -1));
-                
-                return units.size() < 2 * set.size();
-            }
-        };
-        LinkedList<PrimitiveTask> tasks = new LinkedList<>();
+    private static List<Method> getMethods() {
         
-        //methods.add(new Method(c, ))
+        /**
+         * construct first method.
+         */
+        Condition c = new HarvestCondition(); 
+        List<Task> tasks = Arrays.asList(new SimpleMiningTask());
+        Method harvestMethod = new Method(c, tasks);
+        
+        /** 
+         * construct list of methods
+         */
+        List<Method> methods = Arrays.asList(harvestMethod);
+
         return methods;
+    }
+    
+}
+
+class HarvestCondition extends Condition {
+
+    @Override
+    public boolean conditionFulfilled(ExtendedGameState gs) {
+        Set<Long> set = gs.getPlayersWithTask(null);
+        set.addAll(gs.getPlayersWithTask(CollectPlayerTask.class));
+        List<Unit> units = GameStateAnalyser.getUnits(gs.getGameState(), new UnitQuery(UNIT_TYPE.RESSOURCE));
+
+        return units.size() < 2 * set.size();
     }
     
 }
