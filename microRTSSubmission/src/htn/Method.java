@@ -18,26 +18,39 @@ import util.ExtendedGameState;
  */
 public class Method {
 
-    Condition condition;
-    List<Task> taskList;
+    private Condition condition;
+    private List<Task> taskList;
 
     public Method(Condition condition, List<Task> taskList) {
         this.condition = condition;
         this.taskList = taskList;
     }
 
-    public List<PrimitiveTask> resolveTasks(ExtendedGameState o) throws UnresolvableException {
-        if (!condition.conditionFulfilled(o)) {
-            // Methode ist nicht anwendbar
-            throw new UnresolvableException();
-        }
+    /**
+     * checks whether method is viable, based on ExtendedGameState.
+     * e.g. an attack method may only be viable if you have the required units.
+     * @param egs
+     * @return 
+     */
+    public boolean conditionFulfilled(ExtendedGameState egs) {
+        
+        return condition.conditionFulfilled(egs);
+    }
+
+    /**
+     * 
+     * @param egs
+     * @return null if one of the tasks resolves to null, otherwise list of 
+     * resolved primitive tasks
+     */
+    public List<PrimitiveTask> resolveTasks(ExtendedGameState egs) {
 
         LinkedList primTasks = new LinkedList();
         for (Task t : taskList) {
-            List<PrimitiveTask> resolve = t.resolve(o);
+            List<PrimitiveTask> resolve = t.resolve(egs);
             if(resolve == null) {
-                // Ein CompoundTask lässt sich auf keine Art auflösen, Methode failed
-                throw new UnresolvableException();
+                // this happens when a compound task is unresolvable
+                return null;
             }
             primTasks.addAll(resolve);
         }
