@@ -1,8 +1,7 @@
 private.project
 private.xml
 *.class
-/microRTS/build/
-/microRTS/dist/
-/microRTS/nbproject
-/microRTSSubmission/dist/
-/microRTSSubmission/build/
+nbproject
+dist
+build
+nbproject
