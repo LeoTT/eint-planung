@@ -6,45 +6,54 @@
 package playertask;
 
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import micrortssubmission.enums.UNIT_TYPE;
 import rts.GameState;
+import rts.UnitAction;
 import rts.units.Unit;
+import util.GameStateAnalyser;
+import util.UnitQuery;
 
 /**
  *
  * @author Florian
  */
-public class BuildPlayerTask implements IPlayerTask{
+public class BuildPlayerTask extends AbstractPlayerTask{
 
     private Point targetPosition;
-    private int buildingType;
+    private UNIT_TYPE buildingType;
+    
+    private static final int DISTANCE_MODIFIER = 1;
 
-    BuildPlayerTask(int buildingType, Point targetPosition) {
+    public BuildPlayerTask(UNIT_TYPE buildingType, Point targetPosition) {
         
         this.buildingType = buildingType;
         this.targetPosition = targetPosition;
     }
-
-    /**
-     * Get the value of targetPosition
-     *
-     * @return the value of targetPosition
-     */
-    public Point getTargetPosition() {
-        return targetPosition;
-    }
-
-    /**
-     * Get the value of buildingType
-     *
-     * @return the value of buildingType
-     */
-    public int getBuildingType() {
-        return buildingType;
+    
+    @Override
+    public Set<Integer> getPermittedActionIDs() {
+        HashSet set = new HashSet();
+        set.add(UnitAction.TYPE_MOVE);
+        set.add(UnitAction.TYPE_NONE);
+        set.add(UnitAction.TYPE_ATTACK_LOCATION);
+        set.add(UnitAction.TYPE_PRODUCE);
+        return set;
     }
     
     @Override
     public float eval(GameState gs, Unit playerUnit) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        float totalCost = new MovePlayerTask(targetPosition).eval(gs, playerUnit) * DISTANCE_MODIFIER;
+        UnitQuery uq = new UnitQuery(playerUnit.getPlayer());
+        uq.setRange(targetPosition, new Point(1,1));
+        uq.setUnitType(buildingType);
+        List<Unit> units = GameStateAnalyser.getUnits(gs, uq);
+        if(!units.isEmpty()) {
+            totalCost+= 100;
+        }
+        return totalCost;
     }
     
 }

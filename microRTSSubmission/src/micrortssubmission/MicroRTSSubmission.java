@@ -41,6 +41,8 @@ public class MicroRTSSubmission extends AIWithComputationBudget {
     // Called by microRTS at each game cycle.
     // Returns the action the bot wants to execute.
     public PlayerAction getAction(int player, GameState gs) {
+        GameStateAnalyser.PLAYER = player;
+        GameStateAnalyser.ENEMY = player==1?0:1;
         return this.commander.getAction(player,gs);
     }    
     
