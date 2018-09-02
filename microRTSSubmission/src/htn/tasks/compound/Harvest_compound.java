@@ -7,64 +7,62 @@ package htn.tasks.compound;
 
 import htn.tasks.CompoundTask;
 import htn.Method;
-import htn.tasks.PrimitiveTask;
+import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
-import htn.tasks.Task;
 import htn.tasks.primitive.SimpleMiningTask;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import micrortssubmission.enums.UNIT_TYPE;
-import playertask.CollectPlayerTask;
-import rts.units.Unit;
 import util.ExtendedGameState;
-import util.GameStateAnalyser;
-import util.UnitQuery;
 
 /**
  *
  * @author marcel
  */
-public class Harvest extends CompoundTask {    
-    
-    public Harvest() {
-        //Stützt sich auf die Standardauflöselogik. Man muss nur die Methodenliste übergeben.
-        super(getMethods());
-    }
+public class Harvest_compound extends CompoundTask {    
     
     /**
      * Erzeugt die Methoden, die dieser CompoundTask hat.
      * @return Methoden vom Harvest CompoundTask
      */
-    private static List<Method> getMethods() {
-        
-        /**
-         * construct first method.
-         */
-        Condition c = new HarvestCondition(); 
-        List<Task> tasks = Arrays.asList(new SimpleMiningTask());
-        Method harvestMethod = new Method(c, tasks);
-        
-        /** 
-         * construct list of methods
-         */
-        List<Method> methods = Arrays.asList(harvestMethod);
+    public List<Method> getMethods() {
+
+        Method buildWorkerMethod = Method.constructSingularTaskMethod(new BuildWorkerCondition(),
+                new BuildWorker_compound());
+
+        Method buildBaseMethod = Method.constructSingularTaskMethod(new NoBaseCondition(),
+                new BuildBase_compound());
+
+        // TODO Method noRessourcesMethod
+        Method harvestMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
+                new SimpleMiningTask());
+
+        List<Method> methods = Arrays.asList(buildWorkerMethod,
+                                             harvestMethod);
 
         return methods;
     }
     
 }
 
-class HarvestCondition extends Condition {
+class BuildWorkerCondition extends Condition {
 
     @Override
     public boolean conditionFulfilled(ExtendedGameState gs) {
-        Set<Long> set = gs.getPlayersWithTask(null);
-        set.addAll(gs.getPlayersWithTask(CollectPlayerTask.class));
-        List<Unit> units = GameStateAnalyser.getUnits(gs.getGameState(), new UnitQuery(UNIT_TYPE.RESSOURCE));
+        
+        boolean noAvailableWorker = gs.getPlayersWithTask(null, UNIT_TYPE.WORKER).isEmpty();
+        return noAvailableWorker;
+    }
+    
+}
 
-        return units.size() < 2 * set.size();
+class NoBaseCondition extends Condition {
+
+    @Override
+    public boolean conditionFulfilled(ExtendedGameState gs) {
+        
+        boolean noAvailableBase = gs.getPlayersWithTask(null, UNIT_TYPE.BASE).isEmpty();
+        return noAvailableBase;
     }
     
 }

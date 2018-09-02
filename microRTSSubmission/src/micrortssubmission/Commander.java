@@ -2,6 +2,8 @@ package micrortssubmission;
 
 import htn.tasks.PrimitiveTask;
 import htn.tasks.Task;
+import htn.tasks.compound.Harvest_compound;
+import htn.tasks.primitive.BuildWorker_primitive;
 import htn.tasks.primitive.SimpleMiningTask;
 import java.awt.Point;
 import java.util.List;
@@ -34,7 +36,9 @@ public class Commander {
         } else {
             egs.updateGameState(gs);
         }
-        Task t = new SimpleMiningTask();
+        Task t = new Harvest_compound();
+        // Task t = new SimpleMiningTask();
+
         List<PrimitiveTask> resolve = t.resolve(egs);
         for (PrimitiveTask p : resolve) {
             p.execute(egs);
@@ -42,6 +46,8 @@ public class Commander {
         for (Long l : egs.getManagedUnits()) {
             if (egs.getAssignment(l) != null) {
                 if (isUnitIdle(gs.getUnit(l), gs) || egs.isReserved(l)) {
+                    System.out.println(egs.getAssignment(l));
+                    System.out.println(gs.getUnit(l));
                     MiniMax minmax = new MiniMax(gs.getUnit(l), egs.getAssignment(l), gs, player, 2);
                     pa.addUnitAction(gs.getUnit(l), minmax.getUnitAction());
                 }

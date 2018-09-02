@@ -36,17 +36,15 @@ public class SimpleMiningTask extends PrimitiveTask {
      */
     @Override
     public List<PrimitiveTask> resolve(ExtendedGameState egs) {
-        Set<Long> playersWithTask = egs.getUnreservedPlayersWithTask(null);
-        GameState gs = egs.getGameState();
-        List<Unit> units = GameStateAnalyser.getUnits(gs, new UnitQuery(UNIT_TYPE.WORKER, GameStateAnalyser.PLAYER));
-        for (Unit u : units) {
-            if (playersWithTask.contains(u.getID())) {
-                if(egs.reserveUnit(u.getID())) {
-                    reserved.add(u.getID());
-                }
+        
+        Set<Long> tasklessWorkers = egs.getPlayersWithTask(null, UNIT_TYPE.WORKER);
+        
+        for (long unitID : tasklessWorkers) {
+            if (egs.reserveUnit(unitID)) {
+                reserved.add(unitID);
             }
         }
-        // Element zur Liste hinzufügen.
+
         return super.resolve(egs);
     }
 

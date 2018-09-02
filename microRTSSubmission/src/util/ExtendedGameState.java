@@ -7,7 +7,9 @@ package util;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import micrortssubmission.enums.UNIT_TYPE;
 import rts.GameState;
 import rts.units.Unit;
 import playertask.AbstractPlayerTask;
@@ -72,8 +74,8 @@ public class ExtendedGameState {
         return set;
     }
     
-    public boolean isReserved(Long l) {
-        return gs.getTime() == lastReservationMap.get(l);
+    public boolean isReserved(Long unitID) {
+        return gs.getTime() == lastReservationMap.get(unitID);
     }
     
     public void setAssignment(Long l, AbstractPlayerTask task) {
@@ -106,16 +108,33 @@ public class ExtendedGameState {
         return set;
     }
 
-    public Set<Long> getPlayersWithTask(Class c) {
+    public Set<Long> getPlayersWithTask(Class taskClass) {
         HashSet<Long> set = new HashSet();
         for (Long l : getManagedUnits()) {
-            if (c != null && unitAssignmentTable.get(l) != null && unitAssignmentTable.get(l).getClass().equals(c)) {
+            if (taskClass != null && unitAssignmentTable.get(l) != null && unitAssignmentTable.get(l).getClass().equals(taskClass)) {
                 set.add(l);
             } else if (unitAssignmentTable.get(l) == null) {
                 set.add(l);
             }
         }
         return set;
+    }
+    
+    public Set<Long> getPlayersWithTask(Class taskClass, UNIT_TYPE unitType) {
+
+        Set<Long> unitsWithTask = getPlayersWithTask(taskClass);
+        List<Unit> unitsWithType = GameStateAnalyser.getUnits(gs, new UnitQuery(unitType, GameStateAnalyser.PLAYER));
+        
+        Set<Long> unitsWithTaskAndType = new HashSet<>();
+        
+        for (Unit u : unitsWithType) {
+            if (unitsWithTask.contains(u.getID())) {
+                unitsWithTaskAndType.add(u.getID());
+            }
+
+        }
+
+        return unitsWithTaskAndType;
     }
 
 }
