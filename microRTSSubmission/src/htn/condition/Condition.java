@@ -8,6 +8,6 @@ import util.ExtendedGameState;
  */
 public abstract class Condition {
     
-    public abstract boolean conditionFulfilled(ExtendedGameState gs);
+    public abstract boolean conditionFulfilled(ExtendedGameState egs);
     
 }

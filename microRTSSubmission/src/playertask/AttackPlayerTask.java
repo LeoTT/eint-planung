@@ -24,7 +24,7 @@ public class AttackPlayerTask extends AbstractPlayerTask {
     //TODO: Stellschrauben in MOOD packen
     // Stellschrauben für Verhalten
     private static final int DISTANCE_MODIFIER = 1;
-    private static final int HEALTH_MODIFIER = 5;
+    private static final int HEALTH_MODIFIER = 50;
 
     public AttackPlayerTask(Unit enemyUnit) {
         this.enemyUnit = enemyUnit;
@@ -41,13 +41,24 @@ public class AttackPlayerTask extends AbstractPlayerTask {
     
     @Override
     public float eval(GameState gs, Unit playerUnit) {
-        int hp = enemyUnit.getHitPoints();
         
+        
+        int lostHP = enemyUnit.getMaxHitPoints() - enemyUnit.getHitPoints();
+
+        // TODO this makes our attacker basically suicidal. not optimal, but ok
+        if (playerUnit == null) {
+            return 100 + (lostHP * HEALTH_MODIFIER);
+        }
+        
+
         //Teilkosten laufen
-        float totalCost = new MovePlayerTask(new Point(enemyUnit.getX(), enemyUnit.getY())).eval(gs, playerUnit) * DISTANCE_MODIFIER;
+        Point enemyPosition = new Point(enemyUnit.getX(), enemyUnit.getY());
+        float totalCost = new MovePlayerTask(enemyPosition)
+                .eval(gs, playerUnit) * DISTANCE_MODIFIER;
+
         //Teilkosten Gegnerische HP
-        totalCost -= (-hp * HEALTH_MODIFIER);
-        
+        totalCost += (lostHP * HEALTH_MODIFIER);
+
         return totalCost;
     }
     

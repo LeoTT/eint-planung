@@ -8,8 +8,7 @@ package htn.tasks.compound;
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.tasks.CompoundTask;
-import htn.tasks.primitive.BuildBase_primitive;
-import htn.tasks.primitive.SimpleMiningTask;
+import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
  *
  * @author l
  */
-public class BuildBase_compound extends CompoundTask {
+public class BuildBarracks_compound extends CompoundTask{
 
     @Override
     public List<Method> getMethods() {
@@ -26,11 +25,11 @@ public class BuildBase_compound extends CompoundTask {
         
         // TODO no ressources
         
-        Method buildBaseMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
-                new BuildBase_primitive());
+        Method buildBarracksMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
+                new BuildBarracks_primitive());
 
         List<Method> methods = Arrays.asList(buildWorkerMethod,
-                                             buildBaseMethod);
+                                             buildBarracksMethod);
 
         return methods;
     }

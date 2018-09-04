@@ -36,7 +36,6 @@ public class BuildWorker_primitive extends PrimitiveTask {
         Set<Long> tasklessBases = egs.getPlayersWithTask(null, UNIT_TYPE.BASE);
         
         for (long unitID : tasklessBases) {
-            System.out.println(unitID);
             if (egs.reserveUnit(unitID)) {
                 reserved.add(unitID);
             }
@@ -47,11 +46,8 @@ public class BuildWorker_primitive extends PrimitiveTask {
 
     @Override
     public void execute(ExtendedGameState egs) {
-        GameState gs = egs.getGameState();
         for (Long l : reserved) {
             egs.setAssignment(l, new BuildWorkerPlayerTask());
-//            Unit closestRessource = GameStateAnalyser.getClosestUnit(gs, new UnitQuery(UNIT_TYPE.RESSOURCE, -1), GameStateAnalyser.getPoint(gs.getUnit(l)));
-//            egs.setAssignment(l, new CollectPlayerTask(GameStateAnalyser.getPoint(closestRessource)));
         }
     }
 }

@@ -2,18 +2,12 @@ package micrortssubmission;
 
 import htn.tasks.PrimitiveTask;
 import htn.tasks.Task;
-import htn.tasks.compound.Harvest_compound;
-import htn.tasks.primitive.BuildWorker_primitive;
-import htn.tasks.primitive.SimpleMiningTask;
-import java.awt.Point;
+import htn.tasks.compound.BuildBarracks_compound;
+import htn.tasks.compound.BuildBase_compound;
+import htn.tasks.compound.BuildAttackUnit_compound;
+import htn.tasks.primitive.AttackWorker_primitive;
+import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.List;
-import util.GameStateAnalyser;
-import util.UnitQuery;
-import micrortssubmission.enums.UNIT_TYPE;
-import playertask.AttackPlayerTask;
-import playertask.BuildPlayerTask;
-import playertask.CollectPlayerTask;
-import playertask.MovePlayerTask;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.UnitAction;
@@ -36,20 +30,21 @@ public class Commander {
         } else {
             egs.updateGameState(gs);
         }
-        Task t = new Harvest_compound();
-        // Task t = new SimpleMiningTask();
+         Task t = new BuildAttackUnit_compound();
+       // Task t = new BuildBarracks_primitive();
+        // Task t = new SimpleMiningTask(); [htn.tasks.primitive.BuildBarracks_primitive@4f8e5cde]
 
         List<PrimitiveTask> resolve = t.resolve(egs);
         for (PrimitiveTask p : resolve) {
             p.execute(egs);
         }
-        for (Long l : egs.getManagedUnits()) {
-            if (egs.getAssignment(l) != null) {
-                if (isUnitIdle(gs.getUnit(l), gs) || egs.isReserved(l)) {
-                    System.out.println(egs.getAssignment(l));
-                    System.out.println(gs.getUnit(l));
-                    MiniMax minmax = new MiniMax(gs.getUnit(l), egs.getAssignment(l), gs, player, 2);
-                    pa.addUnitAction(gs.getUnit(l), minmax.getUnitAction());
+        for (Long unitID : egs.getManagedUnits()) {
+            if (egs.getAssignment(unitID) != null) {
+                if (isUnitIdle(gs.getUnit(unitID), gs) || egs.isReserved(unitID)) {
+                    System.out.println(egs.getAssignment(unitID));
+                    System.out.println(gs.getUnit(unitID));
+                    MiniMax minmax = new MiniMax(gs.getUnit(unitID), egs.getAssignment(unitID), gs, player, 2);
+                    pa.addUnitAction(gs.getUnit(unitID), minmax.getUnitAction());
                 }
             }
         }

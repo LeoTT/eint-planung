@@ -27,17 +27,19 @@ public class Harvest_compound extends CompoundTask {
      */
     public List<Method> getMethods() {
 
-        Method buildWorkerMethod = Method.constructSingularTaskMethod(new BuildWorkerCondition(),
+        Method buildWorkerMethod = Method.constructSingularTaskMethod(new NoWorkerCondition(),
                 new BuildWorker_compound());
 
         Method buildBaseMethod = Method.constructSingularTaskMethod(new NoBaseCondition(),
                 new BuildBase_compound());
 
-        // TODO Method noRessourcesMethod
+        // TODO Method noRessourcesMethod? 
+        
         Method harvestMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new SimpleMiningTask());
 
         List<Method> methods = Arrays.asList(buildWorkerMethod,
+                                             buildBaseMethod,   
                                              harvestMethod);
 
         return methods;
@@ -45,7 +47,7 @@ public class Harvest_compound extends CompoundTask {
     
 }
 
-class BuildWorkerCondition extends Condition {
+class NoWorkerCondition extends Condition {
 
     @Override
     public boolean conditionFulfilled(ExtendedGameState gs) {

@@ -9,7 +9,7 @@ import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
 import htn.tasks.CompoundTask;
-import htn.tasks.primitive.BuildBaseTask;
+import htn.tasks.primitive.BuildBase_primitive;
 import htn.tasks.primitive.BuildWorker_primitive;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ public class BuildWorker_compound extends CompoundTask {
     public List<Method> getMethods() {
 
         Method buildBaseMethod = Method.constructSingularTaskMethod(new BuildBaseCondition(),
-                new BuildBaseTask());
+                new BuildBase_compound());
 
         Method harvestMethod = Method.constructSingularTaskMethod(new HarvestCondition(),
                 new Harvest_compound());

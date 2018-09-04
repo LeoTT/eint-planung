@@ -79,6 +79,7 @@ public class ExtendedGameState {
     }
     
     public void setAssignment(Long l, AbstractPlayerTask task) {
+        System.out.println(unitAssignmentTable);
         unitAssignmentTable.put(l, task);
     }
 

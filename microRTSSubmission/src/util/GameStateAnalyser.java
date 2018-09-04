@@ -1,6 +1,8 @@
 package util;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import micrortssubmission.enums.UNIT_TYPE;
@@ -64,10 +66,10 @@ public abstract class GameStateAnalyser {
                 .collect(Collectors.toList());
     }
     
-    public static Unit getClosestUnit(GameState gs, UnitQuery query, Point p) {
+    public static Unit getClosestUnit(GameState gs, UnitQuery query, Point point) {
         List<Unit> units = getUnits(gs,query);
         Optional<Unit> unit = units.stream().min((t, t1) -> {
-            return getDistance(p, getPoint(t)) - getDistance(p, getPoint(t1));
+            return getDistance(point, getPoint(t)) - getDistance(point, getPoint(t1));
         });
         if(unit.isPresent()) {
             return unit.get();
@@ -103,4 +105,25 @@ public abstract class GameStateAnalyser {
         return returnList;
     }
 
+    public static Point getNearestFreePoint(GameState gs, Point point) {
+        
+        boolean[][] freeFields = gs.getAllFree();
+
+        if (freeFields[point.x][point.y]) {
+            return point;
+        }
+
+        ArrayList<Point> freePoints = new ArrayList();
+
+        for (int i = 0; i < freeFields.length; i++) {
+            for (int j = 0; j < freeFields[i].length; j++) {
+                freePoints.add(new Point(i, j));
+            }
+        }
+
+        freePoints.sort((Point a, Point b) -> getDistance(point, a) - getDistance(point, b));
+
+        return freePoints.get(0);
+    }
+    
 }
