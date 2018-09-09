@@ -7,6 +7,7 @@ package htn.tasks.compound;
 
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
+import htn.conditions.LackOfRessourceCondition;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.Arrays;
@@ -21,17 +22,20 @@ public class BuildBarracks_compound extends CompoundTask{
     @Override
     public List<Method> getMethods() {
         Method buildWorkerMethod = Method.constructSingularTaskMethod(new NoWorkerCondition(),
-                new BuildWorker_compound());
+                new TrainWorker_compound());
         
-        // TODO no ressources
+        Method lackOfRessourceMethod = Method.constructSingularTaskMethod(new LackOfRessourceCondition(5), 
+                new Harvest_compound());
         
         Method buildBarracksMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new BuildBarracks_primitive());
 
         List<Method> methods = Arrays.asList(buildWorkerMethod,
+                                            lackOfRessourceMethod,
                                              buildBarracksMethod);
 
         return methods;
     }
     
 }
+

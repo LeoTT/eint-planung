@@ -9,6 +9,9 @@ import htn.tasks.CompoundTask;
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
+import htn.conditions.AndCondition;
+import htn.conditions.LackOfUnitCondition;
+import htn.conditions.LessThanXUnits;
 import htn.tasks.primitive.SimpleMiningTask;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +30,11 @@ public class Harvest_compound extends CompoundTask {
      */
     public List<Method> getMethods() {
 
-        Method buildWorkerMethod = Method.constructSingularTaskMethod(new NoWorkerCondition(),
-                new BuildWorker_compound());
+        Method buildWorkerMethod = Method.constructSingularTaskMethod(
+                    new AndCondition(
+                        new LackOfUnitCondition(UNIT_TYPE.WORKER),
+                        new LessThanXUnits(UNIT_TYPE.WORKER, 3)),
+                    new TrainWorker_compound());
 
         Method buildBaseMethod = Method.constructSingularTaskMethod(new NoBaseCondition(),
                 new BuildBase_compound());
@@ -53,6 +59,7 @@ class NoWorkerCondition extends Condition {
     public boolean conditionFulfilled(ExtendedGameState gs) {
         
         boolean noAvailableWorker = gs.getPlayersWithTask(null, UNIT_TYPE.WORKER).isEmpty();
+        
         return noAvailableWorker;
     }
     

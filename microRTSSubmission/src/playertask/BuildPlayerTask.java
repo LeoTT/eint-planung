@@ -56,4 +56,8 @@ public class BuildPlayerTask extends AbstractPlayerTask{
         return totalCost;
     }
     
+    @Override
+    public String toString() {
+        return "BuildPlayerTask - " + targetPosition + " " + buildingType;
+    }
 }

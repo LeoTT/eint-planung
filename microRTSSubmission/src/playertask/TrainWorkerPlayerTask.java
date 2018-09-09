@@ -19,7 +19,7 @@ import util.UnitQuery;
  *
  * @author l
  */
-public class BuildWorkerPlayerTask extends AbstractPlayerTask {
+public class TrainWorkerPlayerTask extends AbstractPlayerTask {
 
     
     @Override

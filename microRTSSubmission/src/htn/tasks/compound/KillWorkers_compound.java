@@ -26,7 +26,7 @@ public class KillWorkers_compound extends CompoundTask{
 
         
         Method buildAttackerMethod = Method.constructSingularTaskMethod(new NoAttackUnitCondition(),
-                new BuildAttackUnit_compound());
+                new TrainAttackUnit_compound());
 
 
         Method killWorkersMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),

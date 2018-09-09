@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import micrortssubmission.enums.UNIT_TYPE;
-import playertask.CollectPlayerTask;
+import playertask.HarvestPlayerTask;
 import rts.GameState;
 import rts.units.Unit;
 import util.ExtendedGameState;
@@ -58,7 +58,7 @@ public class SimpleMiningTask extends PrimitiveTask {
         GameState gs = egs.getGameState();
         for (Long l : reserved) {
             Unit closestRessource = GameStateAnalyser.getClosestUnit(gs, new UnitQuery(UNIT_TYPE.RESSOURCE, -1), GameStateAnalyser.getPoint(gs.getUnit(l)));
-            egs.setAssignment(l, new CollectPlayerTask(GameStateAnalyser.getPoint(closestRessource)));
+            egs.setAssignment(l, new HarvestPlayerTask(GameStateAnalyser.getPoint(closestRessource)));
         }
     }
 

@@ -13,6 +13,7 @@ import java.util.Set;
 import micrortssubmission.enums.UNIT_TYPE;
 import playertask.BuildPlayerTask;
 import rts.GameState;
+import rts.PhysicalGameState;
 import rts.units.Unit;
 import util.ExtendedGameState;
 import util.GameStateAnalyser;
@@ -31,11 +32,21 @@ public class BuildBarracks_primitive extends PrimitiveTask {
         GameState gs = egs.getGameState();
         for (Long l : reserved) {
             Unit worker = gs.getUnit(l);
+           
+            Point randomPoint = getRandomPoint(egs.getGameState().getPhysicalGameState());
+            
             Point targetPoint = GameStateAnalyser.getNearestFreePoint(gs, GameStateAnalyser.getPoint(worker));
             egs.setAssignment(l, new BuildPlayerTask(UNIT_TYPE.BARRACKS, targetPoint));
         }
     }
 
+    private Point getRandomPoint(PhysicalGameState pgs) {
+        int randomX = (int) Math.floor(Math.random() *  pgs.getWidth());
+        int randomY = (int) Math.floor(Math.random() *  pgs.getHeight());
+
+        return new Point(randomX, randomY);
+    }
+    
     @Override
     public List<PrimitiveTask> resolve(ExtendedGameState egs) {
         Set<Long> tasklessWorkers = egs.getPlayersWithTask(null, UNIT_TYPE.WORKER);

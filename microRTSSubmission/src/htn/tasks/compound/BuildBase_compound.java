@@ -22,7 +22,7 @@ public class BuildBase_compound extends CompoundTask {
     @Override
     public List<Method> getMethods() {
         Method buildWorkerMethod = Method.constructSingularTaskMethod(new NoWorkerCondition(),
-                new BuildWorker_compound());
+                new TrainWorker_compound());
         
         // TODO no ressources
         

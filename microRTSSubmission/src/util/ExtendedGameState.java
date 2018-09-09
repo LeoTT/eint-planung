@@ -53,7 +53,18 @@ public class ExtendedGameState {
     public void updateGameState(GameState gs) {
         this.gs = gs;
         lastReservationMap = new HashMap();
+        System.out.println(gs.getTime());
         
+        /* 
+        this is a BAD hack and has BIG downsides. useractions (like building) take time.
+        We need the assignments to consist over multiple cycles. But we need to reset them sometimes.
+        In an ideal world we would check how long the action will take and reset that specific property after n cycles.
+        We also must reserve resources.
+        In this not ideal world we reset the whole assignment table after a while
+        */
+        if (gs.getTime() % 300 == 0) {
+            unitAssignmentTable = new HashMap<>();
+        }
         for(Unit u: GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
             unitAssignmentTable.putIfAbsent(u.getID(), null);
             lastReservationMap.putIfAbsent(u.getID(), -1);
@@ -88,6 +99,7 @@ public class ExtendedGameState {
     }
 
     public Set<Long> getManagedUnits() {
+        System.out.println("ASSIGNMENT TABLE " + unitAssignmentTable);
         return unitAssignmentTable.keySet();
     }
 

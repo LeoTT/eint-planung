@@ -20,15 +20,15 @@ import util.UnitQuery;
  *
  * @author Florian
  */
-public class CollectPlayerTask extends AbstractPlayerTask {
+public class HarvestPlayerTask extends AbstractPlayerTask {
 
     // Wie bitte kriegt man den Zustand "Ressource gedroppt" höher als "Noch gar nicht angefangen mit der Arbeit", wenn beide gleich aussehen?
     // Wenn keiner ne Idee hat müssen wir wohl das Interface umschreiben, dass es eine StatefulUnit kriegt, die Ihre Kopie eines Task updated.
-    public CollectPlayerTask() {
+    public HarvestPlayerTask() {
         ressource = null;
     }
 
-    public CollectPlayerTask(Point ressource) {
+    public HarvestPlayerTask(Point ressource) {
         this.ressource = ressource;
     }
 

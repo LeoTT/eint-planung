@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import micrortssubmission.enums.UNIT_TYPE;
 import playertask.BuildPlayerTask;
-import playertask.BuildWorkerPlayerTask;
+import playertask.TrainWorkerPlayerTask;
 import rts.GameState;
 import rts.units.Unit;
 import util.ExtendedGameState;

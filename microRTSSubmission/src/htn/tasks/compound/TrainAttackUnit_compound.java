@@ -8,8 +8,10 @@ package htn.tasks.compound;
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
+import htn.conditions.LackOfRessourceCondition;
+import htn.conditions.LackOfUnitCondition;
 import htn.tasks.CompoundTask;
-import htn.tasks.primitive.BuildRandomAttackUnit_primitive;
+import htn.tasks.primitive.TrainRandomAttackUnit_primitive;
 import htn.tasks.primitive.SimpleMiningTask;
 import java.util.Arrays;
 import java.util.List;
@@ -20,34 +22,24 @@ import util.ExtendedGameState;
  *
  * @author l
  */
-public class BuildAttackUnit_compound extends CompoundTask {
-
-
+public class TrainAttackUnit_compound extends CompoundTask {
 
     @Override
     public List<Method> getMethods() {
         
-        Method buildBarracksMethod = Method.constructSingularTaskMethod(new NoBarracksCondition(),
+        Method buildBarracksMethod = Method.constructSingularTaskMethod(new LackOfUnitCondition(UNIT_TYPE.BARRACKS),
                 new BuildBarracks_compound());
 
-        // TODO no resources
-
+        Method lackOfRessourceMethod = Method.constructSingularTaskMethod(new LackOfRessourceCondition(2), 
+                new Harvest_compound());
+        
         Method buildAttackUnitMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
-                new BuildRandomAttackUnit_primitive());
+                new TrainRandomAttackUnit_primitive());
 
         List<Method> methods = Arrays.asList(buildBarracksMethod,
+                lackOfRessourceMethod,
                 buildAttackUnitMethod);
         return methods;
     }
 
-}
-
-class NoBarracksCondition extends Condition {
-
-    @Override
-    public boolean conditionFulfilled(ExtendedGameState egs) {
-        boolean noBarracks = egs.getPlayersWithTask(null, UNIT_TYPE.BARRACKS).isEmpty();
-        return noBarracks;
-    }
-    
 }

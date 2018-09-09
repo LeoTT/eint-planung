@@ -9,8 +9,7 @@ import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
 import htn.tasks.CompoundTask;
-import htn.tasks.primitive.BuildBase_primitive;
-import htn.tasks.primitive.BuildWorker_primitive;
+import htn.tasks.primitive.TrainWorker_primitive;
 import java.util.Arrays;
 import java.util.List;
 import util.ExtendedGameState;
@@ -19,7 +18,7 @@ import util.ExtendedGameState;
  *
  * @author l
  */
-public class BuildWorker_compound extends CompoundTask {
+public class TrainWorker_compound extends CompoundTask {
     
     public List<Method> getMethods() {
 
@@ -30,7 +29,7 @@ public class BuildWorker_compound extends CompoundTask {
                 new Harvest_compound());
 
         Method buildWorkerMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
-                new BuildWorker_primitive());
+                new TrainWorker_primitive());
 
         List<Method> methods = Arrays.asList(buildBaseMethod, harvestMethod, buildWorkerMethod);
         

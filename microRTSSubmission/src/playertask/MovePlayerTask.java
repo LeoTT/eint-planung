@@ -49,9 +49,10 @@ public class MovePlayerTask extends AbstractPlayerTask {
             return -10000000;
         }
         int worst = gs.getPhysicalGameState().getWidth() + gs.getPhysicalGameState().getHeight();
+        
+        
         int actual = Math.abs(playerUnit.getX() - target.x) + Math.abs(playerUnit.getY() - target.y);
         //return -manhattanDistance - maxDistance;
         return normalize(0,worst,actual);
     }
-
 }

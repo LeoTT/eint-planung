@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.UnitAction;

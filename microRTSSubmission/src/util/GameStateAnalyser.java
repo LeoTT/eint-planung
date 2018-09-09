@@ -105,13 +105,8 @@ public abstract class GameStateAnalyser {
         return returnList;
     }
 
-    public static Point getNearestFreePoint(GameState gs, Point point) {
-        
+    public static ArrayList<Point> getFreePoints(GameState gs) {
         boolean[][] freeFields = gs.getAllFree();
-
-        if (freeFields[point.x][point.y]) {
-            return point;
-        }
 
         ArrayList<Point> freePoints = new ArrayList();
 
@@ -120,7 +115,17 @@ public abstract class GameStateAnalyser {
                 freePoints.add(new Point(i, j));
             }
         }
+        return freePoints;
+    }
+    
+    public static Point getNearestFreePoint(GameState gs, Point point) {
+        boolean[][] freeFields = gs.getAllFree();
 
+        if (freeFields[point.x][point.y]) {
+            return point;
+        }
+        
+        ArrayList<Point> freePoints = getFreePoints(gs);
         freePoints.sort((Point a, Point b) -> getDistance(point, a) - getDistance(point, b));
 
         return freePoints.get(0);

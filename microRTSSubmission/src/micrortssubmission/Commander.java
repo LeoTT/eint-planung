@@ -4,7 +4,7 @@ import htn.tasks.PrimitiveTask;
 import htn.tasks.Task;
 import htn.tasks.compound.BuildBarracks_compound;
 import htn.tasks.compound.BuildBase_compound;
-import htn.tasks.compound.BuildAttackUnit_compound;
+import htn.tasks.compound.TrainAttackUnit_compound;
 import htn.tasks.primitive.AttackWorker_primitive;
 import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Commander {
         } else {
             egs.updateGameState(gs);
         }
-         Task t = new BuildAttackUnit_compound();
+         Task t = new TrainAttackUnit_compound();
        // Task t = new BuildBarracks_primitive();
         // Task t = new SimpleMiningTask(); [htn.tasks.primitive.BuildBarracks_primitive@4f8e5cde]
 
@@ -41,7 +41,6 @@ public class Commander {
         for (Long unitID : egs.getManagedUnits()) {
             if (egs.getAssignment(unitID) != null) {
                 if (isUnitIdle(gs.getUnit(unitID), gs) || egs.isReserved(unitID)) {
-                    System.out.println(egs.getAssignment(unitID));
                     System.out.println(gs.getUnit(unitID));
                     MiniMax minmax = new MiniMax(gs.getUnit(unitID), egs.getAssignment(unitID), gs, player, 2);
                     pa.addUnitAction(gs.getUnit(unitID), minmax.getUnitAction());

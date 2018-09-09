@@ -10,44 +10,41 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import micrortssubmission.enums.UNIT_TYPE;
-import playertask.BuildWorkerPlayerTask;
-import playertask.CollectPlayerTask;
-import rts.GameState;
-import rts.units.Unit;
+import playertask.TrainUnitPlayerTask;
+import playertask.TrainWorkerPlayerTask;
 import util.ExtendedGameState;
-import util.GameStateAnalyser;
-import util.UnitQuery;
 
 /**
  *
  * @author l
  */
-public class BuildWorker_primitive extends PrimitiveTask {
+public class TrainRandomAttackUnit_primitive extends PrimitiveTask {
 
     HashSet<Long> reserved;
 
-    public BuildWorker_primitive() {
+    public TrainRandomAttackUnit_primitive() {
         reserved = new HashSet<>();
     }
 
     @Override
     public List<PrimitiveTask> resolve(ExtendedGameState egs) {
         
-        Set<Long> tasklessBases = egs.getPlayersWithTask(null, UNIT_TYPE.BASE);
+        Set<Long> tasklessBarracks = egs.getPlayersWithTask(null, UNIT_TYPE.BARRACKS);
         
-        for (long unitID : tasklessBases) {
-            if (egs.reserveUnit(unitID)) {
-                reserved.add(unitID);
+        if (tasklessBarracks.size() > 0) {
+            Long tasklessBarrack = tasklessBarracks.iterator().next();
+            if (egs.reserveUnit(tasklessBarrack)) {
+                reserved.add(tasklessBarrack);
             }
         }
-
         return super.resolve(egs);
     }
 
     @Override
     public void execute(ExtendedGameState egs) {
         for (Long l : reserved) {
-            egs.setAssignment(l, new BuildWorkerPlayerTask());
+            egs.setAssignment(l, new TrainUnitPlayerTask(UNIT_TYPE.LIGHT));
         }
     }
+    
 }

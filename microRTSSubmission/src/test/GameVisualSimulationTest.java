@@ -35,6 +35,7 @@ public class GameVisualSimulationTest {
 //        PhysicalGameState pgs = MapGenerator.basesWorkers8x8Obstacle();
         GameState gs = new GameState(pgs, utt);
         int MAXCYCLES = 5000;
+        //int PERIOD = 20;
         int PERIOD = 20;
         boolean gameover = false;
 
