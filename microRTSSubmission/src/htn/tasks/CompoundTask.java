@@ -18,28 +18,28 @@ import util.ExtendedGameState;
  * @author marcel
  */
 public abstract class CompoundTask extends Task{
-    
+
     public abstract List<Method> getMethods();
-    
+
     /**
-     * 
+     *
      * @param egs
-     * @return null if no valid method is found or every valid method 
+     * @return null if no valid method is found or every valid method
      * resolves to null. Otherwise list of primitive tasks.
      */
     @Override
     public List<PrimitiveTask> resolve(ExtendedGameState egs) {
-        
+
         List<Method> availableMethods = getMethods();
-        
+
         for(Method m : availableMethods) {
             if (m.conditionFulfilled(egs)) {
                 List<PrimitiveTask> primitiveTasks = m.resolveTasks(egs);
                 if (primitiveTasks != null) {
-                    return m.resolveTasks(egs);
+                    return primitiveTasks;
                 }
-            }              
+            }
         }
         return null;
-    }    
+    }
 }
