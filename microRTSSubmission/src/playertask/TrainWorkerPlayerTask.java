@@ -12,6 +12,8 @@ import micrortssubmission.enums.UNIT_TYPE;
 import rts.GameState;
 import rts.UnitAction;
 import rts.units.Unit;
+import static rts.units.UnitTypeTable.VERSION_ORIGINAL;
+import static rts.units.UnitTypeTable.VERSION_ORIGINAL_FINETUNED;
 import util.GameStateAnalyser;
 import util.UnitQuery;
 
@@ -23,6 +25,11 @@ public class TrainWorkerPlayerTask extends AbstractPlayerTask {
 
         @Override
     public int estimateTime() {
+        
+                /*    case VERSION_ORIGINAL: base.produceTime = 250;
+                                   break;
+            case VERSION_ORIGINAL_FINETUNED: base.produceTime = 200;
+                                   break; */
         return 50;
     }
     @Override

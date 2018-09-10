@@ -6,6 +6,7 @@ import htn.tasks.compound.BuildBarracks_compound;
 import htn.tasks.compound.BuildBase_compound;
 import htn.tasks.compound.Harvest_compound;
 import htn.tasks.compound.TrainAttackUnit_compound;
+import htn.tasks.compound.TrainWorker_compound;
 import htn.tasks.primitive.AttackWorker_primitive;
 import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.List;
@@ -13,6 +14,7 @@ import rts.GameState;
 import rts.PlayerAction;
 import rts.UnitAction;
 import rts.units.Unit;
+import rts.units.UnitTypeTable;
 import util.ExtendedGameState;
 
 /**
@@ -31,11 +33,17 @@ public class Commander {
         } else {
             egs.updateGameState(gs);
         }
-         Task t = new BuildBarracks_compound();
-       // Task t = new BuildBarracks_primitive();
+         Task t = new TrainAttackUnit_compound();
+      //  Task t = new BuildBarracks_primitive();
+      
         // Task t = new SimpleMiningTask(); [htn.tasks.primitive.BuildBarracks_primitive@4f8e5cde]
-
+        
+        if (gs.getTime() == 2) {
+            System.out.println("error hier");
+        }
         List<PrimitiveTask> resolve = t.resolve(egs);
+
+        
         for (PrimitiveTask p : resolve) {
             p.execute(egs);
         }
@@ -49,6 +57,7 @@ public class Commander {
                 }
             }
         }
+        System.out.println(pa);
         return pa;
     }
 

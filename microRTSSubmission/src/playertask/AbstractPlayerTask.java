@@ -15,6 +15,10 @@ public abstract class AbstractPlayerTask {
         return 5;
     }
     
+    public int requiredRessources() {
+        return 0;
+    }
+    
     public abstract float eval(GameState gs, Unit playerUnit);
     public abstract Set<Integer> getPermittedActionIDs();
     

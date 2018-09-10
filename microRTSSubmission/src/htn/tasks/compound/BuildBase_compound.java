@@ -7,6 +7,7 @@ package htn.tasks.compound;
 
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
+import htn.condition.LackOfRessourceCondition;
 import htn.condition.LackOfUnitCondition;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.BuildBase_primitive;
@@ -25,16 +26,18 @@ public class BuildBase_compound extends CompoundTask {
     public List<Method> getMethods() {
         Method buildWorkerMethod = Method.constructSingularTaskMethod(new LackOfUnitCondition(UNIT_TYPE.WORKER),
                 new TrainWorker_compound());
-        
-        // TODO no ressources
-        
+
+        Method lackOfRessourceMethod = Method.constructSingularTaskMethod(new LackOfRessourceCondition(10),
+                new Harvest_compound());
+
         Method buildBaseMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new BuildBase_primitive());
 
         List<Method> methods = Arrays.asList(buildWorkerMethod,
-                                             buildBaseMethod);
+                lackOfRessourceMethod,
+                buildBaseMethod);
 
         return methods;
     }
-    
+
 }

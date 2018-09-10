@@ -9,6 +9,7 @@ import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
 import htn.condition.LackOfUnitCondition;
+import htn.condition.LessThanXUnits;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.TrainWorker_primitive;
 import java.util.Arrays;
@@ -24,7 +25,8 @@ public class TrainWorker_compound extends CompoundTask {
     
     public List<Method> getMethods() {
 
-        Method buildBaseMethod = Method.constructSingularTaskMethod(new LackOfUnitCondition(UNIT_TYPE.BASE),
+        Method buildBaseMethod = Method.constructSingularTaskMethod(
+                new LessThanXUnits(UNIT_TYPE.BASE, 1),
                 new BuildBase_compound());
 
         Method harvestMethod = Method.constructSingularTaskMethod(new HarvestCondition(),
@@ -33,7 +35,10 @@ public class TrainWorker_compound extends CompoundTask {
         Method buildWorkerMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new TrainWorker_primitive());
 
-        List<Method> methods = Arrays.asList(buildBaseMethod, harvestMethod, buildWorkerMethod);
+        List<Method> methods = Arrays.asList(
+                buildBaseMethod, 
+                harvestMethod, 
+                buildWorkerMethod);
         
         return methods;
     }

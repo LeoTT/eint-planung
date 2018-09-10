@@ -29,6 +29,18 @@ public class BuildPlayerTask extends AbstractPlayerTask{
     public int estimateTime() {
         return 300;
     }
+    
+    @Override
+    public int requiredRessources() {
+        if (buildingType == UNIT_TYPE.BARRACKS) {
+            return 5;
+        }
+        if (buildingType == UNIT_TYPE.BARRACKS) {
+            return 10;
+        }
+        return 0;
+    }
+    
     private static final int DISTANCE_MODIFIER = 1;
 
     public BuildPlayerTask(UNIT_TYPE buildingType, Point targetPosition) {

@@ -44,7 +44,8 @@ public class Harvest_compound extends CompoundTask {
         Method harvestMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new SimpleMiningTask());
 
-        List<Method> methods = Arrays.asList(buildWorkerMethod,
+        List<Method> methods = Arrays.asList(
+                //buildWorkerMethod,
                                              buildBaseMethod,   
                                              harvestMethod);
 

@@ -50,8 +50,6 @@ public class MovePlayerTask extends AbstractPlayerTask {
             return -10000000;
         }
         if ((gs.getTime() % 100) == 0) {
-            Point playerPosition = new Point(playerUnit.getX(), playerUnit.getY());
-            Point randomPoint = GameStateAnalyser.getNearestFreePoint(gs, playerPosition);
             return Float.MAX_VALUE;
         }
         

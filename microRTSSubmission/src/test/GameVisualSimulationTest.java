@@ -30,7 +30,7 @@ public class GameVisualSimulationTest {
     public static void main(String args[]) throws Exception {
         UnitTypeTable utt = new UnitTypeTable();
         PhysicalGameState pgs = PhysicalGameState.load("maps/16x16/basesWorkers16x16.xml", utt);
-   //     System.setErr(new PrintStream(new OutputStream() {public void write(int b) {}})); // Errorlog unterdrücken
+        System.setErr(new PrintStream(new OutputStream() {public void write(int b) {}})); // Errorlog unterdrücken
 
 //        PhysicalGameState pgs = MapGenerator.basesWorkers8x8Obstacle();
         GameState gs = new GameState(pgs, utt);
@@ -50,8 +50,14 @@ public class GameVisualSimulationTest {
             if (System.currentTimeMillis() >= nextTimeToUpdate) {
                 PlayerAction pa1 = ai1.getAction(0, gs);
                 PlayerAction pa2 = ai2.getAction(1, gs);
-                gs.issueSafe(pa1);
-                gs.issueSafe(pa2);
+                try {
+                    gs.issueSafe(pa1);
+                    gs.issueSafe(pa2);        
+                } catch(Exception e) {
+                    System.out.println("HA");
+                    System.out.println(e);
+                }
+
 
                 // simulate:
                 gameover = gs.cycle();

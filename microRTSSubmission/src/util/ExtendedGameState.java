@@ -13,6 +13,8 @@ import micrortssubmission.enums.UNIT_TYPE;
 import rts.GameState;
 import rts.units.Unit;
 import playertask.AbstractPlayerTask;
+import rts.PhysicalGameState;
+import rts.Player;
 
 /**
  *
@@ -22,23 +24,23 @@ public class ExtendedGameState {
 
     private GameState gs;
     private HashMap<Long, AbstractPlayerTask> unitAssignmentTable;
-    
+
     private HashMap<Long, Integer> lastReservationMap;
 
+    private int ressources;
     /*
     unitAssigmentTable needs to persist for the duration of the action, but no longer.
     This table remembers to reset units at a certain point. Keys being time, values being unitIDs
-    */
+     */
     private HashMap<Integer, Long> resetTable;
-
 
     public ExtendedGameState(GameState gs) {
         this.gs = gs;
         unitAssignmentTable = new HashMap<>();
         lastReservationMap = new HashMap<>();
         resetTable = new HashMap<>();
-        
-        for(Unit u: GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
+
+        for (Unit u : GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
             unitAssignmentTable.putIfAbsent(u.getID(), null);
             lastReservationMap.putIfAbsent(u.getID(), -1);
         }
@@ -46,35 +48,52 @@ public class ExtendedGameState {
 
     /**
      * Reserviert eine Unit für den aktuellen Cycle.
+     *
      * @param unitID ID der zu reservierenden Unit.
-     * @return <code> true </code>, falls die Reservierung erfolgreich war, andernfalls <code> false </code>.
+     * @return <code> true </code>, falls die Reservierung erfolgreich war,
+     * andernfalls <code> false </code>.
      */
     public boolean reserveUnit(Long unitID) {
-        if(!isReserved(unitID)) {
+        if (!isReserved(unitID)) {
             lastReservationMap.put(unitID, gs.getTime());
             return true;
         } else {
             return false;
         }
     }
-    
+
+    public boolean reserve(Long unitID, int cost) {
+        boolean canReserve = !isReserved(unitID) && (ressources - cost > 0);
+                
+        if (canReserve) {
+            lastReservationMap.put(unitID, gs.getTime());
+            ressources -= cost;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getRessources() {
+        return ressources;
+    }
+
     public void updateGameState(GameState gs) {
         this.gs = gs;
         lastReservationMap = new HashMap();
-        System.out.println(gs.getTime());
-        
 
-//        if (gs.getTime() % 300 == 0) {
-//            unitAssignmentTable = new HashMap<>();
-//        }
-System.out.println("RESET TABLE " + resetTable);
+        System.out.println("---------------" + gs.getTime() + "-------------------");
+        System.out.println(unitAssignmentTable);
+        PhysicalGameState pgs = gs.getPhysicalGameState();
+        Player p = pgs.getPlayer(GameStateAnalyser.PLAYER);
+        ressources = p.getResources();
         resetUnits();
-        for(Unit u: GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
+        for (Unit u : GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
             unitAssignmentTable.putIfAbsent(u.getID(), null);
             lastReservationMap.putIfAbsent(u.getID(), -1);
         }
     }
-    
+
     private void resetUnits() {
         int currentTime = gs.getTime();
         if (resetTable.containsKey(currentTime)) {
@@ -90,18 +109,18 @@ System.out.println("RESET TABLE " + resetTable);
 
     public Set<Long> getUnreservedManagedUnits() {
         Set<Long> set = new HashSet<>();
-        for(Long l: getManagedUnits()) {
-            if(!isReserved(l)) {
+        for (Long l : getManagedUnits()) {
+            if (!isReserved(l)) {
                 set.add(l);
             }
         }
         return set;
     }
-    
+
     public boolean isReserved(Long unitID) {
         return gs.getTime() == lastReservationMap.get(unitID);
     }
-    
+
     public void setAssignment(Long unitID, AbstractPlayerTask task) {
         int estimatedDuration = task.estimateTime();
         resetTable.put(gs.getTime() + estimatedDuration, unitID);
@@ -113,7 +132,7 @@ System.out.println("RESET TABLE " + resetTable);
     }
 
     public Set<Long> getManagedUnits() {
-  //      System.out.println("ASSIGNMENT TABLE " + unitAssignmentTable);
+        //      System.out.println("ASSIGNMENT TABLE " + unitAssignmentTable);
         return unitAssignmentTable.keySet();
     }
 
@@ -124,11 +143,11 @@ System.out.println("RESET TABLE " + resetTable);
         egs.unitAssignmentTable = this.unitAssignmentTable;
         return egs;
     }
-    
+
     public Set<Long> getUnreservedPlayersWithTask(Class c) {
         Set<Long> set = new HashSet<>();
-        for(Long id:getPlayersWithTask(c)) {
-            if(!isReserved(id)) {
+        for (Long id : getPlayersWithTask(c)) {
+            if (!isReserved(id)) {
                 set.add(id);
             }
         }
@@ -146,14 +165,14 @@ System.out.println("RESET TABLE " + resetTable);
         }
         return set;
     }
-    
+
     public Set<Long> getPlayersWithTask(Class taskClass, UNIT_TYPE unitType) {
 
         Set<Long> unitsWithTask = getPlayersWithTask(taskClass);
         List<Unit> unitsWithType = GameStateAnalyser.getUnits(gs, new UnitQuery(unitType, GameStateAnalyser.PLAYER));
-        
+
         Set<Long> unitsWithTaskAndType = new HashSet<>();
-        
+
         for (Unit u : unitsWithType) {
             if (unitsWithTask.contains(u.getID())) {
                 unitsWithTaskAndType.add(u.getID());

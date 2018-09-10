@@ -16,7 +16,7 @@ public class UnitQuery {
     private Rectangle range;
 
     public UnitQuery() {
-        range = new Rectangle(new Point(-1,-1), new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        range = new Rectangle(new Point(-1, -1), new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 
     public UnitQuery(UNIT_TYPE unitType, int player_id) {
@@ -30,7 +30,7 @@ public class UnitQuery {
         this.unitType = unitType;
         this.playerId = -1;
     }
-        
+
     public UnitQuery(int player_id) {
         this();
         this.playerId = player_id;
@@ -51,13 +51,17 @@ public class UnitQuery {
     public void setTeam(int player_id) {
         this.playerId = player_id;
     }
-    
+
     public void setRange(Point p1, Point p2) {
-        range = new Rectangle(p1, new Dimension(p2.x-p1.x,p2.y-p1.y ));
+        range = new Rectangle(p1, new Dimension(p2.x - p1.x, p2.y - p1.y));
     }
-    
+
     public Rectangle getRange() {
         return range;
     }
 
+    @Override
+    public String toString() {
+        return "Query for type: " + unitType + " and team: " + playerId;
+    }
 }

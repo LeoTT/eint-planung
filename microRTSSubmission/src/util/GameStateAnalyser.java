@@ -44,10 +44,7 @@ public abstract class GameStateAnalyser {
     public static List<Unit> getUnits(GameState gs, UnitQuery query) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
         List<Unit> allUnits = pgs.getUnits();
-
-        if (query.getUnitType() == UNIT_TYPE.BASE) {
-            System.out.println("shit");
-        }
+        //System.out.println(query);
         return allUnits.stream()
                 .filter(u -> {
                     return query.getRange().contains(new Point(u.getX(), u.getY()));
