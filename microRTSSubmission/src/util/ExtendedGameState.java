@@ -25,10 +25,18 @@ public class ExtendedGameState {
     
     private HashMap<Long, Integer> lastReservationMap;
 
+    /*
+    unitAssigmentTable needs to persist for the duration of the action, but no longer.
+    This table remembers to reset units at a certain point. Keys being time, values being unitIDs
+    */
+    private HashMap<Integer, Long> resetTable;
+
+
     public ExtendedGameState(GameState gs) {
         this.gs = gs;
         unitAssignmentTable = new HashMap<>();
         lastReservationMap = new HashMap<>();
+        resetTable = new HashMap<>();
         
         for(Unit u: GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
             unitAssignmentTable.putIfAbsent(u.getID(), null);
@@ -55,19 +63,24 @@ public class ExtendedGameState {
         lastReservationMap = new HashMap();
         System.out.println(gs.getTime());
         
-        /* 
-        this is a BAD hack and has BIG downsides. useractions (like building) take time.
-        We need the assignments to consist over multiple cycles. But we need to reset them sometimes.
-        In an ideal world we would check how long the action will take and reset that specific property after n cycles.
-        We also must reserve resources.
-        In this not ideal world we reset the whole assignment table after a while
-        */
-        if (gs.getTime() % 300 == 0) {
-            unitAssignmentTable = new HashMap<>();
-        }
+
+//        if (gs.getTime() % 300 == 0) {
+//            unitAssignmentTable = new HashMap<>();
+//        }
+System.out.println("RESET TABLE " + resetTable);
+        resetUnits();
         for(Unit u: GameStateAnalyser.getUnits(gs, new UnitQuery(GameStateAnalyser.PLAYER))) {
             unitAssignmentTable.putIfAbsent(u.getID(), null);
             lastReservationMap.putIfAbsent(u.getID(), -1);
+        }
+    }
+    
+    private void resetUnits() {
+        int currentTime = gs.getTime();
+        if (resetTable.containsKey(currentTime)) {
+            long unitID = resetTable.get(currentTime);
+            unitAssignmentTable.put(unitID, null);
+            resetTable.remove(currentTime);
         }
     }
 
@@ -89,9 +102,10 @@ public class ExtendedGameState {
         return gs.getTime() == lastReservationMap.get(unitID);
     }
     
-    public void setAssignment(Long l, AbstractPlayerTask task) {
-        System.out.println(unitAssignmentTable);
-        unitAssignmentTable.put(l, task);
+    public void setAssignment(Long unitID, AbstractPlayerTask task) {
+        int estimatedDuration = task.estimateTime();
+        resetTable.put(gs.getTime() + estimatedDuration, unitID);
+        unitAssignmentTable.put(unitID, task);
     }
 
     public AbstractPlayerTask getAssignment(Long l) {
@@ -99,7 +113,7 @@ public class ExtendedGameState {
     }
 
     public Set<Long> getManagedUnits() {
-        System.out.println("ASSIGNMENT TABLE " + unitAssignmentTable);
+  //      System.out.println("ASSIGNMENT TABLE " + unitAssignmentTable);
         return unitAssignmentTable.keySet();
     }
 

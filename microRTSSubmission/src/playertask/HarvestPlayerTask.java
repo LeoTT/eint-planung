@@ -40,6 +40,10 @@ public class HarvestPlayerTask extends AbstractPlayerTask {
     private static final int TOTAL_RESSOURCE_MODIFIER = 1000;
 
     @Override
+    public int estimateTime() {
+        return 500;
+    }
+    @Override
     public Set<Integer> getPermittedActionIDs() {
         HashSet set = new HashSet();
         set.add(UnitAction.TYPE_MOVE);

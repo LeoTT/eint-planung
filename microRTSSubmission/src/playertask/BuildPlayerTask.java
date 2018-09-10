@@ -25,6 +25,10 @@ public class BuildPlayerTask extends AbstractPlayerTask{
     private Point targetPosition;
     private UNIT_TYPE buildingType;
     
+    @Override
+    public int estimateTime() {
+        return 300;
+    }
     private static final int DISTANCE_MODIFIER = 1;
 
     public BuildPlayerTask(UNIT_TYPE buildingType, Point targetPosition) {

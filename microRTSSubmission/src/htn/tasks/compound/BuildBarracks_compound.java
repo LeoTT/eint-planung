@@ -7,11 +7,15 @@ package htn.tasks.compound;
 
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
-import htn.conditions.LackOfRessourceCondition;
+import htn.condition.AndCondition;
+import htn.condition.LackOfRessourceCondition;
+import htn.condition.LackOfUnitCondition;
+import htn.condition.LessThanXUnits;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.Arrays;
 import java.util.List;
+import micrortssubmission.enums.UNIT_TYPE;
 
 /**
  *
@@ -21,8 +25,11 @@ public class BuildBarracks_compound extends CompoundTask{
 
     @Override
     public List<Method> getMethods() {
-        Method buildWorkerMethod = Method.constructSingularTaskMethod(new NoWorkerCondition(),
-                new TrainWorker_compound());
+        Method buildWorkerMethod = Method.constructSingularTaskMethod(
+                    new AndCondition(
+                        new LackOfUnitCondition(UNIT_TYPE.WORKER),
+                        new LessThanXUnits(UNIT_TYPE.WORKER, 3)),
+                    new TrainWorker_compound());
         
         Method lackOfRessourceMethod = Method.constructSingularTaskMethod(new LackOfRessourceCondition(5), 
                 new Harvest_compound());
@@ -30,9 +37,9 @@ public class BuildBarracks_compound extends CompoundTask{
         Method buildBarracksMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new BuildBarracks_primitive());
 
-        List<Method> methods = Arrays.asList(buildWorkerMethod,
-                                            lackOfRessourceMethod,
-                                             buildBarracksMethod);
+        List<Method> methods = Arrays.asList(lackOfRessourceMethod,
+                buildWorkerMethod,
+                buildBarracksMethod);
 
         return methods;
     }

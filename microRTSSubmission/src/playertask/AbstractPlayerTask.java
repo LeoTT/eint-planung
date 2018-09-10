@@ -11,6 +11,9 @@ import rts.units.Unit;
  */
 public abstract class AbstractPlayerTask {
     
+    public int estimateTime() {
+        return 5;
+    }
     
     public abstract float eval(GameState gs, Unit playerUnit);
     public abstract Set<Integer> getPermittedActionIDs();

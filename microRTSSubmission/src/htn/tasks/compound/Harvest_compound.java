@@ -9,9 +9,9 @@ import htn.tasks.CompoundTask;
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
-import htn.conditions.AndCondition;
-import htn.conditions.LackOfUnitCondition;
-import htn.conditions.LessThanXUnits;
+import htn.condition.AndCondition;
+import htn.condition.LackOfUnitCondition;
+import htn.condition.LessThanXUnits;
 import htn.tasks.primitive.SimpleMiningTask;
 import java.util.Arrays;
 import java.util.List;
@@ -49,18 +49,6 @@ public class Harvest_compound extends CompoundTask {
                                              harvestMethod);
 
         return methods;
-    }
-    
-}
-
-class NoWorkerCondition extends Condition {
-
-    @Override
-    public boolean conditionFulfilled(ExtendedGameState gs) {
-        
-        boolean noAvailableWorker = gs.getPlayersWithTask(null, UNIT_TYPE.WORKER).isEmpty();
-        
-        return noAvailableWorker;
     }
     
 }

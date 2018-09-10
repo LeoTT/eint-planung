@@ -8,6 +8,7 @@ package htn.tasks.compound;
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
+import htn.condition.MoreThanXUnits;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.BuildBarracks_primitive;
 import java.util.Arrays;
@@ -25,11 +26,9 @@ public class Attack_compound extends CompoundTask {
 
     @Override
     public List<Method> getMethods() {
-        Method buildWorkerMethod = Method.constructSingularTaskMethod(new ExistingEnemyWorkersCondition(),
+        Method buildWorkerMethod = Method.constructSingularTaskMethod(new MoreThanXUnits(UNIT_TYPE.WORKER, GameStateAnalyser.ENEMY, 0),
                 new KillWorkers_compound());
-        
-        // TODO no ressources
-        
+                
         Method buildBarracksMethod = Method.constructSingularTaskMethod(new AlwaysTrueCondition(),
                 new BuildBarracks_primitive());
 
@@ -37,30 +36,6 @@ public class Attack_compound extends CompoundTask {
                                              buildBarracksMethod);
 
         return methods;
-    }
-    
-}
-
-class ExistingEnemyWorkersCondition extends Condition {
-
-    @Override
-    public boolean conditionFulfilled(ExtendedGameState egs) {
-        UnitQuery unitQuery = new UnitQuery(UNIT_TYPE.WORKER, GameStateAnalyser.ENEMY);
-        boolean enemyHasWorkers = GameStateAnalyser.getUnits(egs.getGameState(), unitQuery) == null;
-        
-        return enemyHasWorkers;
-    }
-    
-}
-
-class ExistingEnemyBasesCondition extends Condition {
-
-    @Override
-    public boolean conditionFulfilled(ExtendedGameState egs) {
-        UnitQuery unitQuery = new UnitQuery(UNIT_TYPE.BASE, GameStateAnalyser.ENEMY);
-        boolean enemyHasBase = GameStateAnalyser.getUnits(egs.getGameState(), unitQuery) == null;
-        
-        return enemyHasBase;
     }
     
 }

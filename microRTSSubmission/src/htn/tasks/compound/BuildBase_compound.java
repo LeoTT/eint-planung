@@ -7,11 +7,13 @@ package htn.tasks.compound;
 
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
+import htn.condition.LackOfUnitCondition;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.BuildBase_primitive;
 import htn.tasks.primitive.SimpleMiningTask;
 import java.util.Arrays;
 import java.util.List;
+import micrortssubmission.enums.UNIT_TYPE;
 
 /**
  *
@@ -21,7 +23,7 @@ public class BuildBase_compound extends CompoundTask {
 
     @Override
     public List<Method> getMethods() {
-        Method buildWorkerMethod = Method.constructSingularTaskMethod(new NoWorkerCondition(),
+        Method buildWorkerMethod = Method.constructSingularTaskMethod(new LackOfUnitCondition(UNIT_TYPE.WORKER),
                 new TrainWorker_compound());
         
         // TODO no ressources

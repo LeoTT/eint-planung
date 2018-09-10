@@ -21,7 +21,10 @@ import util.UnitQuery;
  */
 public class TrainWorkerPlayerTask extends AbstractPlayerTask {
 
-    
+        @Override
+    public int estimateTime() {
+        return 50;
+    }
     @Override
     public float eval(GameState gs, Unit playerUnit) {
         UnitQuery unitQuery = new UnitQuery(UNIT_TYPE.WORKER, playerUnit.getPlayer());

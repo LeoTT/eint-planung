@@ -4,6 +4,7 @@ import htn.tasks.PrimitiveTask;
 import htn.tasks.Task;
 import htn.tasks.compound.BuildBarracks_compound;
 import htn.tasks.compound.BuildBase_compound;
+import htn.tasks.compound.Harvest_compound;
 import htn.tasks.compound.TrainAttackUnit_compound;
 import htn.tasks.primitive.AttackWorker_primitive;
 import htn.tasks.primitive.BuildBarracks_primitive;
@@ -30,7 +31,7 @@ public class Commander {
         } else {
             egs.updateGameState(gs);
         }
-         Task t = new TrainAttackUnit_compound();
+         Task t = new BuildBarracks_compound();
        // Task t = new BuildBarracks_primitive();
         // Task t = new SimpleMiningTask(); [htn.tasks.primitive.BuildBarracks_primitive@4f8e5cde]
 
@@ -38,6 +39,7 @@ public class Commander {
         for (PrimitiveTask p : resolve) {
             p.execute(egs);
         }
+        System.out.println(resolve);
         for (Long unitID : egs.getManagedUnits()) {
             if (egs.getAssignment(unitID) != null) {
                 if (isUnitIdle(gs.getUnit(unitID), gs) || egs.isReserved(unitID)) {

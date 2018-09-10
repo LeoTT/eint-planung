@@ -8,6 +8,7 @@ import rts.GameState;
 import rts.PhysicalGameState;
 import rts.UnitAction;
 import rts.units.Unit;
+import util.GameStateAnalyser;
 
 /**
  *
@@ -48,6 +49,13 @@ public class MovePlayerTask extends AbstractPlayerTask {
         if (playerUnit == null) {            
             return -10000000;
         }
+        if ((gs.getTime() % 100) == 0) {
+            Point playerPosition = new Point(playerUnit.getX(), playerUnit.getY());
+            Point randomPoint = GameStateAnalyser.getNearestFreePoint(gs, playerPosition);
+            return Float.MAX_VALUE;
+        }
+        
+        
         int worst = gs.getPhysicalGameState().getWidth() + gs.getPhysicalGameState().getHeight();
         
         

@@ -8,10 +8,12 @@ package htn.tasks.compound;
 import htn.Method;
 import htn.condition.AlwaysTrueCondition;
 import htn.condition.Condition;
+import htn.condition.LackOfUnitCondition;
 import htn.tasks.CompoundTask;
 import htn.tasks.primitive.TrainWorker_primitive;
 import java.util.Arrays;
 import java.util.List;
+import micrortssubmission.enums.UNIT_TYPE;
 import util.ExtendedGameState;
 
 /**
@@ -22,7 +24,7 @@ public class TrainWorker_compound extends CompoundTask {
     
     public List<Method> getMethods() {
 
-        Method buildBaseMethod = Method.constructSingularTaskMethod(new BuildBaseCondition(),
+        Method buildBaseMethod = Method.constructSingularTaskMethod(new LackOfUnitCondition(UNIT_TYPE.BASE),
                 new BuildBase_compound());
 
         Method harvestMethod = Method.constructSingularTaskMethod(new HarvestCondition(),
